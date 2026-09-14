@@ -1,0 +1,59 @@
+{
+  "id": "hieCooling",
+  "title": "入院初步處理與低溫治療",
+  "subtitle": "入院處置原則、aEEG 監測、Whole body cooling",
+  "color": "blue",
+  "sourceRef": "2026 工作手冊 Neonatology p.222-223",
+  "sections": [
+    {
+      "id": "admission",
+      "title": "入院後初步處理原則",
+      "items": [
+        "置病人於處理台並貼 skin temperature sensor，不穿衣服，set IV & A-line，on Foley",
+        "initial IVF 40-60 cc/kg/day，治療並避免低血糖或高血糖",
+        "給予適當呼吸治療，避免低血氧、hypoventilation 或 hyperventilation",
+        "維持 mean BP > 40 mmHg（若已經 Challenge 過一次，給予 inotropic agents）",
+        "因可能有 ATN，抗生素選擇以 Ampicillin + Claforan 為主",
+        "aEEG 監測（CFM 6000 or Criticool 二選一）：開機接上 digital amplifier module → 清潔頭部剃髮，用乾淨紗布沾 NuPrep 軟膏輕輕摩擦頭皮預貼電極位置 30 秒，之後再換乾淨紗布拭去 → 使用 ECG 電極貼片，依電極位置圖黏貼"
+      ]
+    },
+    {
+      "id": "aeeg-monitoring",
+      "title": "開始 aEEG 監測",
+      "items": [
+        "連接電極到 module 上相應顏色的位置開始監測，注意電阻值需低於 20，越低越好",
+        "需至少 20 分鐘以上的監測才可判讀，盡量減少干擾",
+        "是否符合治療的資格視最差的 aEEG 記錄而定，但注意在靜脈抗癲癇藥治療後可能會抑制 EEG 活動"
+      ],
+      "gradeTable": {
+        "columns": ["判讀", "特徵"],
+        "rows": [
+          ["正常", "Sleep/Wake Cycling；Upper Margin > 10 μVolts；Lower Margin > 5 μVolts；Limited Variability-trace is narrow"],
+          ["中度異常", "No Sleep/Wake；Upper Margin > 10 μVolts；Lower Margin < 5 μVolts；Increased variability-trace is broad"],
+          ["嚴重異常", "No Sleep/Wake Cycling；Upper Margin < 10 μVolts；Greatly reduced variability"],
+          ["Seizure", "seizure onset shows continuous high activity，causes CFM to narrow and rise up"]
+        ]
+      }
+    },
+    {
+      "id": "cooling-care",
+      "title": "低溫治療中一般照顧原則",
+      "items": [
+        "開始低溫治療（whole body cooling by Criticool，體溫維持 33-34°C）",
+        "若有使用呼吸器，呼吸器溫度及溼度設定與平常相同",
+        "限水，監測尿量，維持 MBP > 40mmHg，維持血糖正常",
+        "給予疼痛控制：morphine 0.1mg/kg STAT then consider q6hprn",
+        "低溫治療期間維持 NPO",
+        "皮膚照護原則（注意有無出現 subcutaneous fat necrosis）：每 1-2 小時檢查一次接觸低溫介面的皮膚狀況並記錄；每兩小時換姿勢一次，以避免皮膚損傷；若使用低溫毯，要確定臉沒有接觸到毯子；每兩小時檢測一次病人和低溫毯間的濕度並記錄；可考慮在病人和低溫毯間多放一條被單，但不要太厚以免影響低溫治療"
+      ],
+      "calculator": {
+        "id": "morphine-dose",
+        "title": "Morphine 疼痛控制劑量試算",
+        "type": "per-kg",
+        "factor": 0.1,
+        "unit": "mg",
+        "note": "0.1 mg/kg STAT，之後可考慮 q6h prn"
+      }
+    }
+  ]
+}

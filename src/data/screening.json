@@ -1,0 +1,63 @@
+{
+  "id": "screening",
+  "title": "篩檢時程",
+  "subtitle": "aABR、CCHD、腦部超音波、代謝性骨疾病",
+  "color": "teal",
+  "sourceRef": "2026 工作手冊 Neonatology p.200",
+  "sections": [
+    {
+      "id": "aabr",
+      "title": "aABR screening（新生兒聽力篩檢）",
+      "points": [
+        "於出生滿 24 小時、體重滿 2000 克、且可暫時移除干擾（如 air cannula）時進行篩檢",
+        "若第一次未通過，隔天再進行複篩"
+      ]
+    },
+    {
+      "id": "cchd",
+      "title": "Critical CHD screening",
+      "points": [
+        "於出生滿 24–36 小時篩檢（可跟 aABR 同時檢測）",
+        "以血氧導線檢測新生兒右上肢（preductal）與下肢血氧，若兩者血氧均 >95% 且兩者差距 <3% 視為通過",
+        "若 CCHD 檢測異常，請通知 fellow 評估：是否需轉 NO/NI 或照會 CV"
+      ],
+      "table": {
+        "caption": "可檢測出來的 CHD",
+        "columns": ["類別", "疾病"],
+        "rows": [
+          ["立即會低血氧的七項", "HLHS、pulmonary atresia、TOF、TAPVR、TGA、TA (tricuspid atresia)、truncus arteriosus"],
+          ["不一定會立即低血氧的五項", "CoA、DORV、Ebstein anomaly、IAA 與 single ventricle"]
+        ]
+      }
+    },
+    {
+      "id": "brain-echo",
+      "title": "Brain echo screening（腦部超音波）",
+      "points": [
+        "適用對象：BW ≤ 2000 g，或 GA < 36 週（35+6 週以前）",
+        "其他個案需做腦部超音波者請直接聯絡 newborn fellow",
+        "在非醫療院所出生之嬰兒，不論週數體重皆於第一天做到 Brain echo",
+        "早產兒 brain echo 追蹤請告知該單位當日 fellow（不必開醫囑/排程/印單/發照會）"
+      ],
+      "table": {
+        "caption": "追蹤時程（依出生體重）",
+        "columns": ["Birth weight", "Day 1", "Day 3", "Day 7", "Day 21"],
+        "rows": [
+          ["≤999 g", "✓", "✓", "✓", "✓"],
+          ["1000–1499 g", "", "✓", "✓", "✓"],
+          ["≥1500 g", "", "", "✓", "✓"]
+        ]
+      }
+    },
+    {
+      "id": "metabolic-bone",
+      "title": "早產兒代謝性骨疾病篩檢",
+      "points": [
+        "對象：BBW < 1500gm，或 NPO 超過兩周以上之早產兒",
+        "時間：第一次於穩定 full feeding（oTDF 120–150 且停 IVF）兩週後左右抽血；之後每個月檢測直至出院",
+        "篩檢內容：檢測血中 ALP、Ca、P、25-OHD（需自費）濃度"
+      ]
+    }
+  ],
+  "note": "疑似感染時使用經驗性抗生素：一般新生兒原則上使用 Ampicillin + Gentamicin；1000g 以下的早產兒或有腎功能/聽力問題疑慮（例如疑似周產期窒息或產前基因有聽障基因異常者）的新生兒請改為 Ampicillin + Claforan；其餘特殊狀況病人可隨時與 fellow 或 VS 討論。"
+}

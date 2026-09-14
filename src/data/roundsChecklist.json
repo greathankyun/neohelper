@@ -1,0 +1,71 @@
+{
+  "id": "roundsChecklist",
+  "title": "查房小抄",
+  "subtitle": "每日查房routine 確認項目",
+  "color": "slate",
+  "sourceRef": "NB routine note",
+  "sections": [
+    {
+      "id": "daily-checklist",
+      "title": "查房 routine",
+      "items": [
+        "每天隨體重調奶量/藥量 (Caffeine, Aswell, Ventol, Viagra…)",
+        "奶量每天增加 10-20 ml/kg/day",
+        "呼吸器（種類 + 多久）",
+        "體重（記兩天 + BBW）：<2000gm 目標 +10-20gm/kg/day；>2000gm 目標 +20-30gm/day",
+        "Feeding：種類 + 量（PO量/OG量）+ OG反抽餘奶量",
+        "I/O：早產 +40~+60；足月 +80~+120",
+        "Insensible water loss：general 400 × BSA，查表約 20-70 ml/kg/day（還是要回頭看臨床狀況）",
+        "抗生素預計用多久？Culture 報告出來了嗎？是否 3 天陰性就停抗生素？",
+        "Apnea/GER 每天次數（至少記錄 2 天）",
+        "其他：Drain 量/顏色、大便量/顏色..."
+      ]
+    },
+    {
+      "id": "basic-labs",
+      "title": "基本抽血時程",
+      "items": [
+        "剛出生：CBC/DC, CRP, B/C, (喘)gas, (SGA/LGA/GDM…)sugar, (疑感染)IgM…",
+        "（媽媽沒規則產檢）照一般抽，等媽媽 data；(Dr.周) CBCDC, CRP, BC, gas, +/- sugar",
+        "24hrs：預計 PN → electrolyte(Na/K/Cl/Ca/P/Mg), gas(看HCO3-), BUN/Cr(留baseline)；預計開吃且尿很好(UOP>2)可不抽",
+        "（Dr.簡）懷疑先天感染 +IgM，if >20，抽 TORCH",
+        "（Dr.周）Na/K/Ca/Mg, CRP, T/D bil.(for感染)",
+        "滿月血：Ca, P, ALP, Vit.D；（疑貧血）CBC or gas, Fe…",
+        "（輔醫）有 TPN 者，每周抽血 CBCDC, Na/K/Cl/Ca/P/Mg, BUN/Cr, AST/ALT/T.bil/D.bil/GGT/ALP, T.Cho, TG"
+      ]
+    },
+    {
+      "id": "standby-questions",
+      "title": "Standby 問問題",
+      "items": ["週數", "預估體重", "媽媽病史", "羊水乾不乾淨"]
+    },
+    {
+      "id": "consent-forms",
+      "title": "同意書",
+      "items": ["加護病房同意書", "母乳庫同意書", "其他自費（Fe $1563、Liquid D $2000、抽 Vit.D $900）"]
+    },
+    {
+      "id": "respiratory-triggers",
+      "title": "呼吸支持觸發條件",
+      "items": [
+        "一班 2 次 apnea → + caffeine",
+        "只有 nasal flaring → 可入 NO/NBC",
+        "若合併有 grunting or retraction → 入 NI"
+      ]
+    },
+    {
+      "id": "line-change",
+      "title": "換管時程",
+      "table": {
+        "columns": ["管路", "更換頻率"],
+        "rows": [
+          ["UV/UA", "最多 1 週就需拔掉"],
+          ["ETT", "Q2W"],
+          ["CVC", "Q3-4W"],
+          ["PICC, 氣切", "Q4W"]
+        ]
+      },
+      "note": "BBW<1500，務必放 A line，for 潛在頻繁抽血"
+    }
+  ]
+}

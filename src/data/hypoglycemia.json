@@ -1,0 +1,68 @@
+{
+  "id": "hypoglycemia",
+  "title": "新生兒低血糖",
+  "subtitle": "出生 24 小時內血糖檢測建議及處理",
+  "color": "sky",
+  "sourceRef": "2026 工作手冊 Neonatology p.220（第七版 2020.04.20 修訂）",
+  "reference": "Ref. Pediatrics 2011; 127; 575-9",
+  "sections": [
+    {
+      "id": "symptoms",
+      "title": "低血糖症狀",
+      "points": ["蒼白或發紺、體溫異常", "吵鬧不易安撫 (irritability)", "發抖 (tremor) 或悸動 (jitteriness)", "痙攣 (seizure)、呼吸暫停", "嗜睡或意識狀態異常、嘔吐", "餵食困難、哭聲微弱或高頻"]
+    },
+    {
+      "id": "risk-groups",
+      "title": "低血糖高風險族群",
+      "points": ["早產兒 (GA < 37週)", "過熟兒 (GA ≥ 42週)", "體重過輕 (SGA) 或過重 (LGA)", "產婦有妊娠糖尿病或重糖尿病", "產婦有高血壓", "5 分鐘 Apgar Score ≤ 6"]
+    },
+    {
+      "id": "sga-lga-table",
+      "title": "SGA / LGA 出生體重下上限對照（依 GA、性別）",
+      "table": {
+        "columns": ["GA", "SGA(男)", "SGA(女)", "LGA(男)", "LGA(女)"],
+        "rows": [
+          ["41週", "2960", "2850", "3950", "3800"],
+          ["40週", "2900", "2800", "3850", "3700"],
+          ["39週", "2800", "2700", "3745", "3600"],
+          ["38週", "2704", "2604", "3630", "3500"],
+          ["37週", "2560", "2476", "3500", "3370"]
+        ],
+        "note": "SGA = 小於下表值；LGA = 大於下表值"
+      }
+    },
+    {
+      "id": "management-flow",
+      "title": "處置流程",
+      "flow": [
+        {
+          "branch": "有症狀且血糖 < 40 mg/dL",
+          "result": "→ 依血糖分層走靜脈注射路徑（見下方）"
+        },
+        {
+          "branch": "無症狀之低血糖高風險新生兒：出生後1小時內及4小時檢測血糖；其後每2-3小時餵食一次；每4-6小時檢測一次餐前血糖",
+          "paths": [
+            { "condition": "<4小時，血糖<25 mg/dL；4-24小時，血糖<35 mg/dL", "result": "靜脈注射 D10W 2cc/kg，2-3分鐘慢速給予 → 接續 IV 滴清注射 D10W 3cc/kg/hr (GIR 5 mg/kg/min)，30分後檢測血糖：≥50 mg/dL 維持目前 SIR；<50 mg/dL 逐步調高 SIR" },
+            { "condition": "<4小時，血糖<40 mg/dL；4-24小時，血糖<45 mg/dL", "result": "餵食母乳或配方乳 10-20cc，餵食後1小時後測血糖 → 若仍未達標則走上一層（靜脈注射）路徑" },
+            { "condition": "<4小時，血糖≥40 mg/dL；4-24小時，血糖≥45 mg/dL", "result": "每2-3小時餵食一次，其後每4-6小時檢測一次餐前血糖，直到連續兩次血糖>45mg/dL 且餵食狀況良好可中止檢測血糖" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "taper-iv",
+      "title": "Taper IVF 原則",
+      "trigger": "血糖穩定時（連續兩次 >45 mg/dL）且餵食狀況良好時，請記得 taper IVF，不然容易 fluid overload",
+      "steps": [
+        "於餐前 30 分鐘調降 SIR 0.5-1 mg/kg/min，30 分鐘後測 AC sugar",
+        "若 AC sugar > 45 mg/dL，則繼續吃奶及照此原則 Q6H 調降 SIR、驗血糖",
+        "若 AC sugar < 45 mg/dL，則快讓寶寶吃奶並將 SIR 調回原流速，於一小時後再次驗血糖；若穩定則 6 小時後再試著 taper 一次"
+      ]
+    },
+    {
+      "id": "pearl",
+      "title": "臨床要點",
+      "points": ["BBW<1500gm，don't IV push D10W！先調整 SIR（例如 5→6），30min-1hr recheck"]
+    }
+  ]
+}

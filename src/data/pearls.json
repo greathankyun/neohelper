@@ -1,0 +1,21 @@
+{
+  "id": "pearls",
+  "title": "臨床小提醒",
+  "subtitle": "其他小細節整理",
+  "color": "stone",
+  "sourceRef": "NB routine note（=其他小細節=）",
+  "items": [
+    "拔管 1 小時後驗 gas，4 小時後照 CXR",
+    "輸血需不需要 NPO 或計水量，以 BW 1500 為界",
+    "APT test：for 鮮紅出血（消化過不準）",
+    "Kleihauer–Betke test (KB test)：驗媽媽體內有沒有胎兒的 Hb，for fetomaternal transfusion",
+    "剛出生會用花生油，是 for 清除胎脂（GA 30 週以上較多）",
+    "Try air cannula 72 hrs 可轉 NO(NBC)",
+    "量體重：<1000gm → Q3D；>1000gm → QOD",
+    "Apnea：caffeine 用到 34+6 週，ventol 35+0 週後考慮銜接",
+    "BPD：ventol（weaning 慢時加）、Viagra（if PHTN，例如 TR、BNP 高）；若 BPD 合併 PHTN，keep SpO2>95% 避免肺壓變高",
+    "頭圍正常長大 <0.2cm/day（1.4cm/week；外科急刀抓 2cm/week）",
+    "插管中：PEEP 4-7（不要太高），CO2 高的話 delta P 要高才洗得下來（PIP/PEEP 差愈多洗愈好），PIP 最高 22（盡量不要超過會破掉）",
+    "BW>1500gm，若呼吸穩定可考慮 off CPAP"
+  ]
+}

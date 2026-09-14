@@ -1,0 +1,72 @@
+{
+  "id": "rop",
+  "title": "ROP 視網膜病變篩檢",
+  "subtitle": "分期定義、追蹤頻率、結束追蹤條件",
+  "color": "amber",
+  "sourceRef": "2026 工作手冊 Neonatology p.200, 230",
+  "sections": [
+    {
+      "id": "fundus-schedule",
+      "title": "Fundus examination for screening ROP",
+      "points": [
+        "請統一於該週一發眼科 ROP 照會單（切勿遺漏）",
+        "篩檢對象與時間請參考「臺大醫院早產兒視網膜病變篩檢指引」"
+      ]
+    },
+    {
+      "id": "staging",
+      "title": "篩檢結果說明",
+      "description": "以「Zone X, Stage Y, ± Plus disease」之順序描述",
+      "table": {
+        "caption": "Stage 定義",
+        "columns": ["Stage", "Definition"],
+        "rows": [
+          ["Stage 0", "Immature vascularization only"],
+          ["Stage 1", "Demarcation line separating avascular from vascularized retina"],
+          ["Stage 2", "Ridge in region of demarcation line"],
+          ["Stage 3", "Extraretinal fibrovascular proliferation (FVP) / neovascularization (NV) extending into the vitreous"],
+          ["Stage 4", "Partial retinal detachment"],
+          ["Stage 5", "Total retinal detachment"],
+          ["Plus", "Increased vascular dilatation and tortuosity of posterior retinal vessels in at least two quadrants of the retina"],
+          ["Pre-plus", "More vascular dilatation and tortuosity than normal but insufficient to make the diagnosis of plus disease"]
+        ]
+      },
+      "zoneNote": "Zone I：以視神經與黃斑距離的 2 倍為半徑之圓形範圍；Zone II：Zone I 外緣至鼻側鋸齒緣（ora serrata）之範圍；Zone III：Zone II 外側之顳側新月形範圍。"
+    },
+    {
+      "id": "followup-frequency",
+      "title": "追蹤頻率建議（單位：週）",
+      "points": [
+        "實際追蹤頻率因個別病況而異，請依照照會單回覆之指示安排",
+        "安排眼內注射治療後 8 週內，須每週安排追蹤；後續則視 ROP 改善情形而定",
+        "橫線底 T 表示須治療（Type 1 ROP or worse），格子底 1 表示 Type 2 ROP",
+        "懷疑 AP-ROP 應每週積極追蹤（確診者應即安排治療），不受 Stage 之限制",
+        "出現 Pre-plus disease 時，宜比照有 Plus disease 之追蹤頻率",
+        "Zone I 和 II 間無明顯生理界線，故 posterior Zone II 有時需當作 Zone I 處置"
+      ],
+      "table": {
+        "caption": "Stage + Zone 對照追蹤週數",
+        "columns": ["Zone / Stage", "0 (-)", "0 (+)", "1 (-)", "1 (+)", "2 (-)", "2 (+)", "3 (-)", "3 (+)", "4-5 (Any)"],
+        "rows": [
+          ["I", "1", "T", "1", "T", "1", "T", "T", "T", "T"],
+          ["Post. II", "1-2", "T*", "1", "T*", "1", "T", "T*", "T", "T"],
+          ["II", "1-2", "1-2", "2", "1-2", "1-2", "T", "1", "T", "T"],
+          ["III", "2-3", "2", "2-3", "2", "2-3", "1-2", "1-2", "T", "T"]
+        ]
+      }
+    },
+    {
+      "id": "stop-criteria",
+      "title": "結束 ROP 篩檢追蹤條件（符合下列任一項，且經眼科師評估已無 ROP 風險）",
+      "points": [
+        "360 度的週邊視網膜血管均已生長至 ora serrata（即 Zone III complete）",
+        "PMA 已達 40 週，且視網膜血管已長至 Zone III 且過去在 Zone I、II 均未出現過 ROP（即一直是 Stage 0）",
+        "追蹤期間曾出現過任何 ROP Stage 者（不論有無接受治療），一律由眼科部主治醫師決定何時結束追蹤（參考指標：未曾出現過 Type 1 ROP 且 PMA 已達 50 週；或曾接受過眼內注射 anti-VEGF 者，應符合條件1或至少追蹤至 PMA 65 週以上且達到 ROP regression）"
+      ]
+    }
+  ],
+  "references": [
+    "Fierson WM, AAP, AAO, et al. Screening Examination of Premature Infants for Retinopathy of Prematurity. Pediatrics. 2018;142(6):e20183061.",
+    "Jefferies AL, Canada Paediatric Society (CPS). Retinopathy of prematurity: An update on screening and management. Paediatrics & child health. 2016;21(2):101-8"
+  ]
+}

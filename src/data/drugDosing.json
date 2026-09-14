@@ -1,0 +1,129 @@
+{
+  "id": "drugDosing",
+  "title": "藥物劑量",
+  "subtitle": "依體重/BBW 計算之新生兒常用藥物",
+  "color": "fuchsia",
+  "sourceRef": "NB routine note（輔大醫院常規文字order）",
+  "drugs": [
+    {
+      "id": "vitamin-k",
+      "name": "Vitamin K",
+      "note": "須於出生後 6 小時內給予",
+      "tiers": [
+        { "condition": "BBW ≥ 1500gm", "dose": "1 mg" },
+        { "condition": "BBW 1000–1500gm", "dose": "0.5 mg" },
+        { "condition": "BBW 600–1000gm", "dose": "0.3 mg" },
+        { "condition": "BBW 400–600gm", "dose": "0.2 mg" },
+        { "condition": "BBW < 400gm", "dose": "0.1 mg" }
+      ],
+      "calculator": {
+        "type": "bbw-tier",
+        "unit": "mg",
+        "tiers": [
+          { "min": 1500, "max": null, "dose": 1 },
+          { "min": 1000, "max": 1499, "dose": 0.5 },
+          { "min": 600, "max": 999, "dose": 0.3 },
+          { "min": 400, "max": 599, "dose": 0.2 },
+          { "min": 0, "max": 399, "dose": 0.1 }
+        ]
+      }
+    },
+    {
+      "id": "curosurf",
+      "name": "Curosurf",
+      "dose": "2.5 ml/kg",
+      "calculator": { "type": "per-kg", "factor": 2.5, "unit": "ml" }
+    },
+    {
+      "id": "caffeine",
+      "name": "Caffeine",
+      "indication": "Apnea of prematurity；用到 34+6 週",
+      "loading": { "dose": 20, "unit": "mg/kg/dose", "diluent": "2ml D5W/NS run 30 min" },
+      "maintenance": { "dose": 5, "unit": "mg/kg/dose", "diluent": "1ml D5W/NS run 10 min" },
+      "calculator": { "type": "loading-maintenance", "loadingFactor": 20, "maintenanceFactor": 5, "unit": "mg" }
+    },
+    {
+      "id": "aminophylline",
+      "name": "Aminophylline",
+      "loading": { "dose": "5 ml/kg", "diluent": "IF for 30 mins" },
+      "maintenance": { "dose": "3-5 mg/kg/day Q8H, IV push" },
+      "po": { "dose": "3-5 mg/kg/day Q6H；5 mg/kg/day for bronchodilator" }
+    },
+    {
+      "id": "ibuprofen",
+      "name": "Ibuprofen (IV, Pedea) — for PDA",
+      "tiers": [
+        { "condition": "Day 1", "dose": "10 mg/kg" },
+        { "condition": "Day 2-3", "dose": "5 mg/kg" }
+      ],
+      "calculator": { "type": "day-tier", "day1Factor": 10, "day2to3Factor": 5, "unit": "mg" }
+    },
+    {
+      "id": "antifungal",
+      "name": "Anti-fungal cream",
+      "tiers": [
+        { "condition": "早產兒（皮膚嫩）", "dose": "Exelderm" },
+        { "condition": "大小孩", "dose": "Zalain" }
+      ]
+    },
+    {
+      "id": "dopamine",
+      "name": "Dopamine（升壓藥）",
+      "conversion": "1 ml/hr = 10 mcg/kg/min",
+      "range": "1-10 mcg/kg/min，with titration"
+    },
+    {
+      "id": "epinephrine",
+      "name": "Epinephrine（升壓藥）",
+      "conversion": "1 ml/hr = 1 mcg/kg/min",
+      "range": "0.1-1 mcg/kg/min，with titration"
+    },
+    {
+      "id": "hydrocortisone",
+      "name": "Hydrocortisone（疑似 adrenal insufficiency）",
+      "dose": "1 mg/kg/dose Q8H x 1 day",
+      "note": "早產兒剛出生若懷疑（多 28 週以前）可給 single dose",
+      "calculator": { "type": "per-kg", "factor": 1, "unit": "mg" }
+    },
+    {
+      "id": "metoclopramide",
+      "name": "Metoclopramide (IV)（Prokinetic）",
+      "dose": "0.2 mg/kg Q6H",
+      "calculator": { "type": "per-kg", "factor": 0.2, "unit": "mg" }
+    },
+    {
+      "id": "famotidine",
+      "name": "Famotidine (IV)（Prokinetic）",
+      "dose": "0.5 mg/kg/day QD",
+      "calculator": { "type": "per-kg", "factor": 0.5, "unit": "mg" }
+    },
+    {
+      "id": "ketamine",
+      "name": "Ketamine（Sedation，優先選擇）",
+      "dose": "0.5-1 mg/kg/dose",
+      "calculator": { "type": "per-kg-range", "min": 0.5, "max": 1, "unit": "mg" }
+    },
+    {
+      "id": "fentanyl",
+      "name": "Fentanyl（Sedation）",
+      "dose": "1 mcg/kg/dose，slowly IV push for 3 mins",
+      "calculator": { "type": "per-kg", "factor": 1, "unit": "mcg" }
+    },
+    {
+      "id": "extubation-regimen",
+      "name": "Extubation 用藥組合（ENT formula，vs. 前三後一 / encore）",
+      "regimen": [
+        { "drug": "Betamethasone (IV)", "dose": "0.1 mg/kg/dose, q12h（21:00、09:00 給藥）" },
+        { "drug": "Epinephrine (INH)", "dose": "4 doses (Q6H) after extubation" },
+        { "drug": "Methylprednisolone (IV)", "dose": "4 doses (Q6H) after extubation" },
+        { "drug": "Lidocaine (吸入?)", "dose": "4 doses after extubation" }
+      ],
+      "alternative": "拔管前其他選擇：Dexamethasone 0.25 mg/kg/dose（至少拔管前4小時要有一劑，UpToDate 建議 total 3劑）"
+    },
+    {
+      "id": "gentamicin",
+      "name": "Gentamicin 配製",
+      "note": "配 D5W 2ml"
+    }
+  ]
+}

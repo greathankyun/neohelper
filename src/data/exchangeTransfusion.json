@@ -1,0 +1,62 @@
+{
+  "id": "exchangeTransfusion",
+  "title": "新生兒換血流程",
+  "subtitle": "第一版 2018.5.24／2025.05 檢視",
+  "color": "indigo",
+  "sourceRef": "2026 工作手冊 Neonatology p.216-217",
+  "sections": [
+    {
+      "id": "prep",
+      "title": "前置作業",
+      "steps": [
+        "20ml syringe 5 支（可再多備 5 支）、Three way 3 個（可以再多備 2-3 個）、filter *2 個、FFP 輸液管*1個、細延長管*2個",
+        "血品加溫器*2",
+        "肛溫線及膚溫線",
+        "放置一條 A-line，兩條 Peripheral line 或一條 Central line 加一條 Peripheral line",
+        "備血（O 型 pRBC、AB 型 FFP／請血庫配對無該項抗原）",
+        "準備 calcium gluconate",
+        "準備換血 excel 檔案",
+        "準備換血同意書，通知家屬",
+        "先做 newborn screen",
+        "估計換血量：足月兒 80 (ml/kg) × BW(kg) × 2；早產兒 100 (ml/kg) × BW(kg) × 2"
+      ]
+    },
+    {
+      "id": "procedure",
+      "title": "操作作業",
+      "steps": [
+        "病人先裝置好生理監視器、BP cuff、肛溫線、膚溫線",
+        "第一袋 pRBC 送達時請檢驗血品的 gas + 氣送緊急檢查室驗 CBC 管(不開單) for Hct",
+        "輸入 Hct 至 excel 檔案，算出 mixing pRBC+FFP 的比例 (target Hct 55-60%)",
+        "一條 peripheral line 接細延長管，預備用來 slow IV push calcium gluconate",
+        "帶髮帽口罩，刷手，無菌穿戴手術衣，準備無菌操作面",
+        "輸血端：central line 或 peripheral line 的末端接一個 three way，分別連接一支 20cc 空針和第2個 three way，第2個 three way 末端分別連接 FFP & pRBC 的輸血管線",
+        "抽血端：A-line 末端接一個 three way，分別再連接一支 20ml 空針及一條細延長管，細延長管末端接空針或袋子收集廢血",
+        "抽血和輸血的速度要互相配合，不可一次抽出過多血量卻沒有對應的輸血，在 vital sign 穩定的狀況下，在兩小時內換完",
+        "在第一袋血回來的 15 分鐘後，請叫第二袋血（血品回來之後一樣送血品的 gas + 氣送緊急檢查室驗 CBC 管(不開單)）",
+        "抽出的第一管血送 one touch, blood gas, CBC, reticulocyte, electrolytes, total protein, creatinine, liver function test, G6PD, blood culture, Newborn screen",
+        "換血過程中時注意體溫及 vital sign，BP 請 q5min 量測",
+        "每換 100ml 血液，補 calcium gluconate 1ml (Slow IV push)，注意心跳變化",
+        "換血後，最後一管血送 one touch, blood gas, CBC, T-bil, electrolytes, Blood culture",
+        "換血後請注意 platelet count（若 plt<50000/uL，輸 platelet）、Na, K, Ca, Mg, bilirubin level, blood glucose and body temperature",
+        "完成換血後，check one touch every 30mins, till 2-3 hours later",
+        "完成換血 4 小時候檢驗 CBC, T-bil"
+      ]
+    }
+  ],
+  "calculator": {
+    "id": "exchange-volume",
+    "type": "exchange-volume",
+    "title": "換血量估算",
+    "inputs": [
+      { "id": "bw", "label": "體重", "unit": "kg", "type": "number" },
+      { "id": "term", "label": "足月 / 早產", "type": "select", "options": [
+        { "value": "term", "label": "足月兒 (80 ml/kg)" },
+        { "value": "preterm", "label": "早產兒 (100 ml/kg)" }
+      ] }
+    ],
+    "formula": "bw * (term === 'preterm' ? 100 : 80) * 2",
+    "resultLabel": "建議換血總量",
+    "resultUnit": "ml"
+  }
+}

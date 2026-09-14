@@ -1,0 +1,155 @@
+{
+  "id": "jaundice",
+  "title": "新生兒黃疸",
+  "subtitle": "治療標準數值表、治療流程、病因 workup",
+  "color": "amber",
+  "sourceRef": "2026 工作手冊 Neonatology p.214-215；治療標準表 2025.05.08 第五版修訂",
+  "sections": [
+    {
+      "id": "bilirubin-standards",
+      "title": "新生兒黃疸治療標準 (mg/dl)",
+      "note": "天數選取原則（適用於照光與換血治療）：以最接近者為準，如 3.4 day 用 3 day 之標準，1.2 day 用 1 day 之標準。",
+      "table": {
+        "caption": "1. 照光標準",
+        "columns": ["GA", "0.5 day", "1 day", "2 day", "3 day", "4 day", "≥5 day"],
+        "rows": [
+          ["≤ GA 27+6/7 wks", 4.0, 5.5, 7.5, 9.0, 9.5, 11.0],
+          ["GA 28-31+6/7 wks", 5.5, 7.5, 8.5, 11.5, 12.0, 12.0],
+          ["GA 32-34+6/7 wks", 5.5, 8.0, 10.5, 13.0, 15.0, 15.0],
+          ["GA 35-36+6/7 wks", 7.0, 9.0, 12.0, 14.5, 16.0, 16.5],
+          ["GA ≥ 37 wks", 7.5, 10.0, 13.5, 16.0, 17.5, 18.0]
+        ]
+      },
+      "table2": {
+        "caption": "2. 積極照光 (Intensive phototherapy) 標準",
+        "columns": ["GA", "0.5 day", "1 day", "2 day", "3 day", "4 day", "≥5 day"],
+        "rows": [
+          ["≤ GA 27+6/7 wks", 7.0, 7.5, 8.5, 10.5, 11.0, 13.0],
+          ["GA 28-31+6/7 wks", 8.0, 9.5, 10.5, 13.0, 13.5, 14.0],
+          ["GA 32-34+6/7 wks", 9.0, 11.0, 13.0, 15.0, 16.0, 16.5],
+          ["GA 35-36+6/7 wks", 10.5, 12.0, 14.5, 16.0, 17.0, 17.5],
+          ["GA ≥ 37 wks", 11.5, 13.0, 15.5, 17.5, 19.0, 20.0]
+        ]
+      },
+      "table3": {
+        "caption": "3. 換血標準",
+        "columns": ["GA", "0.5 day", "1 day", "2 day", "3 day", "4 day", "≥5 day"],
+        "rows": [
+          ["≤ GA 27+6/7 wks", 9.0, 10.0, 11.5, 12.0, 13.0, 15.0],
+          ["GA 28-31+6/7 wks", 10.0, 11.5, 12.5, 15.0, 15.0, 16.0],
+          ["GA 32-34+6/7 wks", 13.0, 14.5, 16.5, 17.0, 17.5, 18.0],
+          ["GA 35-36+6/7 wks", 14.5, 16.0, 18.5, 20.0, 21.0, 21.5],
+          ["GA ≥ 37 wks", 15.5, 17.0, 19.5, 21.5, 23.0, 23.5]
+        ]
+      },
+      "calculator": {
+        "id": "bilirubin-lookup",
+        "type": "bilirubin-lookup",
+        "title": "依 GA / 日齡查詢照光、積極照光、換血標準",
+        "dayColumns": [0.5, 1, 2, 3, 4, 5],
+        "dayLabels": ["0.5 day", "1 day", "2 day", "3 day", "4 day", "≥5 day"],
+        "gaGroups": [
+          { "label": "≤ GA 27+6/7 wks", "maxWeeks": 27 },
+          { "label": "GA 28-31+6/7 wks", "minWeeks": 28, "maxWeeks": 31 },
+          { "label": "GA 32-34+6/7 wks", "minWeeks": 32, "maxWeeks": 34 },
+          { "label": "GA 35-36+6/7 wks", "minWeeks": 35, "maxWeeks": 36 },
+          { "label": "GA ≥ 37 wks", "minWeeks": 37 }
+        ],
+        "phototherapy": [
+          [4.0, 5.5, 7.5, 9.0, 9.5, 11.0],
+          [5.5, 7.5, 8.5, 11.5, 12.0, 12.0],
+          [5.5, 8.0, 10.5, 13.0, 15.0, 15.0],
+          [7.0, 9.0, 12.0, 14.5, 16.0, 16.5],
+          [7.5, 10.0, 13.5, 16.0, 17.5, 18.0]
+        ],
+        "intensivePhototherapy": [
+          [7.0, 7.5, 8.5, 10.5, 11.0, 13.0],
+          [8.0, 9.5, 10.5, 13.0, 13.5, 14.0],
+          [9.0, 11.0, 13.0, 15.0, 16.0, 16.5],
+          [10.5, 12.0, 14.5, 16.0, 17.0, 17.5],
+          [11.5, 13.0, 15.5, 17.5, 19.0, 20.0]
+        ],
+        "exchange": [
+          [9.0, 10.0, 11.5, 12.0, 13.0, 15.0],
+          [10.0, 11.5, 12.5, 15.0, 15.0, 16.0],
+          [13.0, 14.5, 16.5, 17.0, 17.5, 18.0],
+          [14.5, 16.0, 18.5, 20.0, 21.0, 21.5],
+          [15.5, 17.0, 19.5, 21.5, 23.0, 23.5]
+        ]
+      }
+    },
+    {
+      "id": "treatment-principle",
+      "title": "治療原則",
+      "points": [
+        "黃疸值達照光標準者，給予照光治療並追蹤其黃疸值變化趨勢（未到照光標準但經醫師判斷須做 work-up 者仍入中重度病房）",
+        "當數值接近換血標準時請通知 fellow，考慮轉加護病房，並持續觀察是否有膽紅素腦病變症狀（嗜睡、餵食不良、肌張力低下或過高或高頻哭聲等）",
+        "有膽紅素腦病變症狀、具神經毒性危險因子且膽紅素高於換血標準，及治療後 2hr 仍高於換血標準者，需給予換血治療",
+        "停止黃疸照光原則：以出生後年齡之 Bil 值為基準，以當天標準降低 2.0 停止照光"
+      ]
+    },
+    {
+      "id": "discharge-flow",
+      "title": "足月兒出院當天黃疸處置流程",
+      "note": "TcB = transcutaneous bilirubin，經皮黃疸檢測；TSB = total serum bilirubin = micro bilirubin，足跟血黃疸值檢測",
+      "flow": [
+        {
+          "branch": "出院前檢測 TcB",
+          "paths": [
+            { "condition": "TcB < 照光標準 − 2", "result": "出院" },
+            { "condition": "TcB ≥ 照光標準", "result": "收 NOR 照光" },
+            { "condition": "照光標準 − 2 ≤ TcB < 照光標準", "result": "檢測 TSB" }
+          ]
+        },
+        {
+          "branch": "出院前檢測 TSB（或前項需檢測 TSB 者）",
+          "paths": [
+            { "condition": "TSB ≥ 照光標準", "result": "收 NOR 照光" },
+            { "condition": "照光標準 − 2 ≤ TSB < 照光標準", "result": "建議收 NOR 照光，或出院後 2 天門診追蹤" },
+            { "condition": "TSB < 照光標準 − 2", "result": "出院" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etiology-workup",
+      "title": "Workup for etiology",
+      "flow": [
+        {
+          "branch": "直接型黃疸",
+          "causes": ["敗血症", "膽道閉鎖", "膽酸循環異常", "新生兒肝炎", "胎內先天性感染", "大量溶血", "酪氨酸血症 (Tyrosinemia)", "半乳糖血症 (Galactosemia)"]
+        },
+        {
+          "branch": "間接型黃疸 → Coomb's Test (+)",
+          "causes": ["同族免疫溶血反應 (Isoimmune)：ABO 血型、Rh 血型、其他血型"]
+        },
+        {
+          "branch": "間接型黃疸 → Coomb's Test (−) → Hemoglobin Normal to Low → Reticulocyte 增加",
+          "causes": ["特殊紅血球形態造成之破裂紅血球 (Ex. Spherocytosis)", "瀰漫性血管內凝血 (DIC)", "G6PD 缺乏症"]
+        },
+        {
+          "branch": "間接型黃疸 → Coomb's Test (−) → Hemoglobin Normal to Low → Reticulocyte 正常",
+          "causes": ["其他體內出血 (IVH, adrenal hemorrhage)", "腸肝循環增加", "熱量不足", "新生兒窒息"]
+        },
+        {
+          "branch": "間接型黃疸 → Coomb's Test (−) → Hemoglobin 紅血球過多 (Polycythemia)",
+          "causes": ["雙胞胎間輸血症候群 (TTTS)", "母體胎兒間輸血症候群", "延遲斷臍", "SGA"]
+        },
+        {
+          "branch": "延遲性黃疸 (Prolonged Jaundice)",
+          "causes": ["Gilbert Syndrome", "Crigler-Najjar Syndrome", "唐氏症", "甲狀腺低下", "母乳哺育之黃疸"]
+        }
+      ],
+      "workupOrders": [
+        {
+          "trigger": "達 Intensive phototherapy 標準，或 early onset hyperbilirubinemia (<48hrs 即達照光標準) 者",
+          "orders": ["CBC + D/C, Reticulocyte count, direct Coombs test, T-bil", "ABO blood type：媽媽 O type，爸爸非 O type 才測"]
+        },
+        {
+          "trigger": "已超過一周大黃疸入院者",
+          "orders": ["CBC/DC, CRP, urinalysis：for the suspicion of infection", "Total and direct bilirubin：to r/o direct type hyperbilirubinemia", "Check Newborn screen result：G6PD deficiency, hypothyroidism, galactosemia"]
+        }
+      ]
+    }
+  ]
+}

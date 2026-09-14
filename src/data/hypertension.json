@@ -1,0 +1,28 @@
+{
+  "id": "hypertension",
+  "title": "新生兒高血壓",
+  "subtitle": "PMA 血壓百分位表與評估項目",
+  "color": "cyan",
+  "sourceRef": "2026 工作手冊 Neonatology p.231（UpToDate. Neonatal hypertension）",
+  "note": "數值為 26-44 週 PMA 嬰兒之估計值（出生後 2 週以上）",
+  "bpTable": {
+    "columns": ["PMA", "SBP 50th", "SBP 95th", "SBP 99th", "DBP 50th", "DBP 95th", "DBP 99th", "MAP 50th", "MAP 95th", "MAP 99th"],
+    "rows": [
+      ["26週", 55, 72, 77, 30, 50, 56, 38, 57, 63],
+      ["28週", 60, 75, 80, 38, 50, 54, 45, 58, 63],
+      ["30週", 65, 80, 85, 40, 55, 60, 48, 63, 68],
+      ["32週", 68, 83, 88, 40, 55, 60, 49, 64, 69],
+      ["34週", 70, 85, 90, 40, 55, 60, 50, 65, 70],
+      ["36週", 72, 87, 92, 50, 65, 70, 57, 72, 77],
+      ["38週", 77, 92, 97, 50, 65, 70, 59, 74, 79],
+      ["40週", 80, 95, 100, 50, 65, 70, 60, 75, 80],
+      ["42週", 85, 98, 102, 50, 65, 70, 62, 76, 81],
+      ["44週", 88, 105, 110, 50, 68, 73, 63, 80, 85]
+    ]
+  },
+  "workup": {
+    "title": "Diagnostic studies for Evaluation of Hypertensive Infants (Avery's Neonatology, Ch39)",
+    "generallyUseful": ["BUN, Creatinine, Calcium", "CBC and Platelet count", "Chest x-ray", "Electrolytes", "Plasma renin", "Renal ultrasound with Doppler", "Urinalysis (+culture)"],
+    "usefulInSelected": ["Abdominal/Pelvic ultrasound", "Aldosterone, Cortisol (morning)", "Aortography", "Echocardiogram", "Nuclear scan (DTPA/MAG-3)", "Renal angiography", "Thyroid studies, urine VMA/HVA, VCUG"]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "id": "bpd",
+  "title": "早產兒慢性肺疾病 (BPD)",
+  "subtitle": "第四版 2024.05 修訂／2025.05 檢視",
+  "color": "violet",
+  "sourceRef": "2026 工作手冊 Neonatology p.226",
+  "sections": [
+    {
+      "id": "def-2001",
+      "title": "2001 NICHD 定義",
+      "caveat": "缺點：需要使用 28 天以上的 O2，但如今有許多不需要 O2 但需要正壓呼吸的早產兒無法被評估，且也沒有納入新的呼吸治療工具",
+      "table": {
+        "columns": ["評估時機", "GA < 32 weeks", "GA ≥ 32 weeks"],
+        "rows": [
+          ["時機", "PMA 36 weeks or discharge", "28-56 days old or discharge to home"]
+        ]
+      },
+      "gradeTable": {
+        "columns": ["Grade", "Treatment with oxygen >21% for at least 28 days plus"],
+        "rows": [
+          ["Mild", "Breath room air"],
+          ["Moderate", "需要 FiO2<30%"],
+          ["Severe", "需要 FiO2≥30% and/or positive pressure"]
+        ]
+      }
+    },
+    {
+      "id": "def-2016",
+      "title": "2016 Revisions of NICHD criteria",
+      "criteria": "GA < 32wks with radiographic confirmation of parenchymal lung disease with respiratory support at PMA 36wks",
+      "caveat": "缺點：只能評估 GA < 32wks 的早產兒",
+      "table": {
+        "columns": ["Grade", "Invasive PPV", "NCPAP, NIPPV, Nasal cannula ≥ 3 L/min", "Nasal cannula 1 to <3 L/min", "Nasal cannula < 1 L/min", "Hood O2"],
+        "rows": [
+          ["I (Mild)", "", "21", "22-29%", "22-70%", "22-29%"],
+          ["II (Moderate)", "21%", "22-29%", "≥30%", "≥70%", "≥30%"],
+          ["III (Severe)", "> 21%", "≥30%", "", "", ""],
+          ["III (A)", "Early death (between 14 days of postnatal age and 36 weeks) owing to persistent parenchymal lung disease and respiratory failure", "", "", "", ""]
+        ]
+      }
+    },
+    {
+      "id": "def-2019",
+      "title": "2019 Jensen definition of BPD",
+      "criteria": "GA < 32 wks with respiratory support at PMA 36 wks or discharge",
+      "table": {
+        "columns": ["Grade", "Mode of respiratory support", "FiO2"],
+        "rows": [
+          ["I", "nasal cannula flow ≤ 2 L/min", "any"],
+          ["II", "nasal cannula flow > 2 L/min, nCPAP or NIPPV", "any"],
+          ["III", "invasive mechanical ventilation", "any"]
+        ]
+      }
+    },
+    {
+      "id": "pulm-htn",
+      "title": "早產兒慢性肺疾病之肺高壓評估",
+      "flow": [
+        { "step": "PMA 36 週時：Stat CXR for BPD change、Respiratory support for BPD severity" },
+        { "step": "是否（仍）有肺高壓症狀（如 high O2 demand、difficulty in weaning）？" },
+        { "branch": "有", "result": "Check NTpro-BNP、照會 CV 做正式超音波 → 若有肺高壓證據：1. Start treatment for pul. HTN (Viagra, then Bosentan) 2. Check NTpro-BNP / CXR Qmonth 3. Keep SpO2 92-95%" },
+        { "branch": "無", "result": "1. Keep current treatment 2. CXR Qmonth until no need of respiratory support" }
+      ],
+      "note": "若 BPD 合併 PHTN，keep SpO2>95% 避免肺壓變高（見查房小抄）"
+    }
+  ]
+}

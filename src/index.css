@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #EFECDF;
+  color: #1F2A33;
+}
+
+::selection {
+  background-color: rgba(184, 69, 46, 0.2);
+}
+
+/* visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #B8452E;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* readout style for calculator results, evokes a bedside monitor digit display */
+.readout {
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.02em;
+}

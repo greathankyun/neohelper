@@ -1,0 +1,207 @@
+{
+  "id": "tpn",
+  "title": "TPN 全靜脈營養",
+  "subtitle": "電解質基本盤、蛋白質/脂肪目標、追蹤里程碑",
+  "color": "emerald",
+  "sourceRef": "NB routine note（輔大醫院常規文字order）",
+  "sections": [
+    {
+      "id": "general",
+      "title": "一般原則",
+      "points": [
+        "每天泡，假日要連三天 TPN（Smof 可能要一天一天開）",
+        "TPN 表單的單位：幾乎都是 mEq，只有 P 是 mmol",
+        "Osm > 900 就需要 central line！"
+      ]
+    },
+    {
+      "id": "electrolyte-baseline",
+      "title": "電解質基本盤（每日）",
+      "table": {
+        "columns": [
+          "電解質",
+          "基本盤劑量 (mEq，P 為 mmol)"
+        ],
+        "rows": [
+          [
+            "Na",
+            25
+          ],
+          [
+            "K",
+            20
+          ],
+          [
+            "Cl",
+            20
+          ],
+          [
+            "Ca",
+            25
+          ],
+          [
+            "P",
+            10
+          ],
+          [
+            "Mg",
+            5
+          ]
+        ]
+      },
+      "sourceNote": [
+        "Na 來源：Na2P、NaHCO3、NaCl；K 來源：KCl",
+        "計算範例：Na 25 = P 10 ×2 + 5份 HCO3（一般抓 2-5）",
+        "Ca:P 比例目標約 1.1-1.3 (mmol)",
+        "出生滿 24 小時，驗 UN/Cr + 電解質 (Na/K/Cl/Ca/P/Mg)；先問媽媽有沒有給過 MgSO4，若有，Mg 可能較高",
+        "早產兒 Ca 目標 2.4-2.5"
+      ],
+      "calorieTarget": "熱量目標：90-120 kcal/kg/day",
+      "calculator": {
+        "id": "tpn-electrolyte",
+        "type": "tpn-electrolyte",
+        "title": "TPN 電解質每日劑量試算（依基本盤 × 體重）",
+        "inputs": [
+          {
+            "id": "bw",
+            "label": "體重",
+            "unit": "kg",
+            "type": "number"
+          }
+        ],
+        "baseline": {
+          "Na": 25,
+          "K": 20,
+          "Cl": 20,
+          "Ca": 25,
+          "P": 10,
+          "Mg": 5
+        },
+        "unitNote": "Na/K/Cl/Ca/Mg 單位為 mEq/kg/day，P 為 mmol/kg/day；結果僅供參考，仍須依當日電解質數值與臨床狀況調整",
+        "resultUnit": "每日總量 (mEq 或 mmol)"
+      }
+    },
+    {
+      "id": "protein",
+      "title": "蛋白質",
+      "points": [
+        "出生 24 小時內開始給，1.5 g/kg/day 開始，即使限量也要高於 1.5",
+        "早產目標：2.5-3.5 g/kg/day；足月目標：1.5-3.0 g/kg/day",
+        "NPC:N ratio 目標 >100（小早產 BBW<1500），最好 >120，目標 >150"
+      ]
+    },
+    {
+      "id": "lipid",
+      "title": "脂肪",
+      "points": [
+        "出生 24-48 小時開始給",
+        "目標：3g/kg/day（<4）",
+        "監測：TG < 265（隨時可驗，不要從給 lipid 的 line 抽）",
+        "吃超過半量 TDF 可開始降 lipid（砍半或 3→2→1→0）",
+        "Sepsis 或黃疸時：減量至 1-1.5 g/kg/day"
+      ]
+    },
+    {
+      "id": "heparin-vitamin-trace",
+      "title": "Heparin / Vitamin / Trace",
+      "points": [
+        "Heparin：0.5 unit/ml",
+        "Vitamin：出生第一天可加",
+        "Trace：出生第一天可加，Peditrace 1ml/kg/day（已含 250ug/kg/day）",
+        "Zn：早產 450 ug/kg/day，足月 200 ug/kg/day（足月不用額外加，因 trace 裡已有；早產速算額外加 200ug/kg/day）"
+      ]
+    },
+    {
+      "id": "otdf-milestones",
+      "title": "oTDF 追蹤里程碑",
+      "table": {
+        "columns": [
+          "oTDF",
+          "動作"
+        ],
+        "rows": [
+          [
+            "50",
+            "加 Vit.D"
+          ],
+          [
+            "80-120",
+            "加鐵劑（常常 120）"
+          ],
+          [
+            "100",
+            "停 TPN 換 Taita No.5"
+          ],
+          [
+            "120",
+            "full feeding"
+          ],
+          [
+            "130-150",
+            "BW>1000gm 的目標"
+          ],
+          [
+            "160-170 (200)",
+            "BW<1000gm 的目標"
+          ]
+        ]
+      },
+      "note": "盡量一天只動一個變項，除非體重>1500或消化好（例如：今天加奶，明天再加母添）"
+    },
+    {
+      "id": "feeding-type",
+      "title": "喝奶種類選擇",
+      "table": {
+        "columns": [
+          "體重",
+          "配方"
+        ],
+        "rows": [
+          [
+            "<2000gm",
+            "24kcal PF"
+          ],
+          [
+            "2000-2500gm",
+            "22kcal PF or PDF"
+          ],
+          [
+            ">2500gm",
+            "IF"
+          ]
+        ]
+      },
+      "points": [
+        "母乳添加劑：<1800gm 或 GA<32+0/7 週使用",
+        "Vitamin D：<1000gm 給 800U QD；>1000gm 給 400U QD（目標 level > 20，促進 Ca 吸收，減少 renal loss）"
+      ]
+    },
+    {
+      "id": "keep-line",
+      "title": "Keep line（A-line / PICC）",
+      "table": {
+        "columns": [
+          "體重",
+          "流速",
+          "配方"
+        ],
+        "rows": [
+          [
+            ">1500gm",
+            "1 ml/hr",
+            "125U in 500ml N/S"
+          ],
+          [
+            "<1500gm",
+            "0.5 ml/hr",
+            "125U in 500ml H/S"
+          ]
+        ]
+      },
+      "points": [
+        "Procedure flush：5U in 20ml N/S for central line flush",
+        "最低可 0.2 ml/hr"
+      ]
+    }
+  ]
+}

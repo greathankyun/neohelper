@@ -1,0 +1,40 @@
+{
+  "id": "omphalitis",
+  "title": "疑似肚臍炎",
+  "subtitle": "處理建議流程",
+  "color": "rose",
+  "sourceRef": "2026 工作手冊 Neonatology p.219（第二版 2019/05 修訂）",
+  "sections": [
+    {
+      "id": "trigger",
+      "title": "評估起點：肚臍周圍發紅，是否合併以下任一項",
+      "points": ["腫", "壓痛", "有滲液", "有臭味"]
+    },
+    {
+      "id": "flow",
+      "title": "判斷流程",
+      "flow": [
+        {
+          "condition": "肚臍周圍發紅，且無合併腫/壓痛/滲液/臭味",
+          "next": "是否為當天預定出院者？"
+        },
+        {
+          "condition": "→ 是（當天預定出院）",
+          "result": "衛教後與家屬討論以下三種處理方式：1. 住院觀察　2. 回家觀察，並約隔天回診追蹤　3. 由月子中心護理人員觀察"
+        },
+        {
+          "condition": "→ 否（非當天預定出院）",
+          "result": "1. 避免尿布壓迫　2. 每班重新評估紅區有無擴大、腫脹、滲液、臭味"
+        },
+        {
+          "condition": "重新評估後 → 無擴大/腫脹/滲液/臭味",
+          "result": "至觀察至隔天早上皆無異狀以上現象，衛教家屬臍帶如何觀察及臍帶護理方式即可"
+        },
+        {
+          "condition": "重新評估後 → 有擴大/腫脹/滲液/臭味（或初評即合併任一項）",
+          "result": "1. 收住院　2. CBC/DC, CRP, B/C　3. Pus swab for Gram stain and culture　4. Empirical Abx: Oxacillin +/- Gentamicin"
+        }
+      ]
+    }
+  ]
+}

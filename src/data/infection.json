@@ -1,0 +1,69 @@
+{
+  "id": "infection",
+  "title": "無症狀疑早期感染新生兒",
+  "subtitle": "處理建議與產後 24 小時內 Maternal fever 流程",
+  "color": "rose",
+  "sourceRef": "2026 工作手冊 Neonatology p.218（第五版 2026.05.28 修訂）",
+  "reference": "Ref. Pediatrics. 2012. 129; 1006–1015",
+  "sections": [
+    {
+      "id": "risk-trigger",
+      "title": "新生兒有周產期感染的風險或疑慮",
+      "table": {
+        "columns": ["生產方式", "風險條件"],
+        "rows": [
+          ["NSD", "GBS 不明且 IAP <4hr／GBS(+) 且 IAP <4hr／破水 >18hr"],
+          ["C/S", "破水 >18hr"]
+        ]
+      },
+      "note": "以上條件成立，但新生兒無受感染的症狀時，依下方媽媽發燒情形與 GA 分流處理"
+    },
+    {
+      "id": "flow-by-ga",
+      "title": "依產婦發燒情形與胎兒週數分流",
+      "flow": [
+        {
+          "branch": "媽媽生產前後發燒 (≥38°C)，有塞 Cytotec",
+          "result": "若媽媽出現下列任一狀況：發燒(≥38°C)兩次／發燒溫度≥38.5°C／有URI或任何感染症狀／產後12小時才燒≥38°C → 立即檢驗 CBC/DC, CRP, 血液培養(至少1cc)",
+          "exception": "完全符合以下描述者可繼續於 Baby Room 觀察：只低燒(38-38.5°C)一次，且產後12小時內發生的低燒，且媽媽沒有任何感染症狀 → 白天通知 CR/大總跟蹤寶寶狀況"
+        },
+        {
+          "branch": "媽媽生產前後發燒 (≥38°C)，沒有塞 Cytotec",
+          "result": "立即檢驗 CBC/DC, CRP, 血液培養(至少1cc)"
+        },
+        {
+          "branch": "GA < 37 週，且有：絨毛羊膜炎／破水>18hr／GBS(+)且IAP<4hr",
+          "result": "立即檢驗 CBC/DC, CRP, 血液培養(至少1cc)"
+        },
+        {
+          "branch": "GA ≥ 37 週，且有：疑似絨毛羊膜炎／母親有感染症狀",
+          "result": "立即檢驗 CBC/DC, CRP, 血液培養(至少1cc)"
+        },
+        {
+          "branch": "GA ≥ 37 週，且有：破水>18hr／GBS(+)且IAP<4hr（無立即感染疑慮）",
+          "result": "出生後 6-12 小時檢驗 CBC/DC, CRP, 血液培養(至少1cc)"
+        }
+      ]
+    },
+    {
+      "id": "post-culture",
+      "title": "檢驗後處置",
+      "points": [
+        "視臨床狀況/檢驗報告決定是否給抗生素，若無法排除感染，可先給經驗性抗生素（通常為 Ampicillin + Gentamicin），考慮做 CSF 檢驗",
+        "血液培養陽性：持續抗生素治療、重複血液培養、做 CSF 檢驗",
+        "血液培養陰性，但其他 Lab data 有異常：持續使用抗生素，觀察 ≥48hr",
+        "血液培養陰性，其他 Lab data 皆正常：停用抗生素，觀察 ≥48hr",
+        "無感染疑慮：不需抗生素觀察 ≥48hr"
+      ]
+    },
+    {
+      "id": "maternal-fever-24hr",
+      "title": "產後 24 小時內 Maternal fever 流程（>24 小時則依醫師判斷決定是否需收入院）",
+      "points": [
+        "沒有塞 Cytotec 的媽媽發燒 ≥38°C，寶寶收 NOR 抽血評估",
+        "有塞 Cytotec 且合併以下任一狀況的媽媽，則寶寶收 NOR 抽血評估：發燒(≥38°C)兩次／發燒≥38.5°C／有URI或其他 infection Signs/Symptoms／產後12小時才燒≥38°C",
+        "媽媽有發燒但不符以上標準故沒收 NOR 的寶寶，白天通知 CR 追蹤"
+      ]
+    }
+  ]
+}
