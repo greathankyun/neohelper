@@ -85,3 +85,28 @@ export function addLog(patientId, data) {
 export function deleteLog(logId) {
   return request(`/api/logs/${logId}`, { method: 'DELETE' });
 }
+
+// ---- 查房指引 (rounds guide) ----
+export function upsertRound(patientId, dateStr, data) {
+  return request(`/api/patients/${patientId}/rounds/${dateStr}`, { method: 'PUT', body: JSON.stringify(data) });
+}
+
+export function addLine(patientId, data) {
+  return request(`/api/patients/${patientId}/lines`, { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function removeLine(lineId, endDate) {
+  return request(`/api/lines/${lineId}`, { method: 'PATCH', body: JSON.stringify({ endDate }) });
+}
+
+export function deleteLine(lineId) {
+  return request(`/api/lines/${lineId}`, { method: 'DELETE' });
+}
+
+export function addVaccineEvent(patientId, data) {
+  return request(`/api/patients/${patientId}/vaccine-events`, { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function deleteVaccineEvent(eventId) {
+  return request(`/api/vaccine-events/${eventId}`, { method: 'DELETE' });
+}

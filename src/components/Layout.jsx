@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { MODULES, SEARCH_INDEX } from '../data';
 import { colorOf } from '../theme';
 
@@ -70,24 +70,30 @@ function SearchBox() {
 }
 
 function NavRail() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const match = location.pathname.match(/^\/module\/([^/]+)$/);
+  const currentId = match ? match[1] : '';
+
   return (
-    <nav className="flex gap-2 overflow-x-auto pb-1 -mb-1">
-      {MODULES.map((m) => {
-        const c = colorOf(m.color);
-        return (
-          <NavLink
-            key={m.id}
-            to={`/module/${m.id}`}
-            className={({ isActive }) =>
-              `whitespace-nowrap text-sm px-3 py-1.5 border ${c.chip} ${
-                isActive ? 'ring-1 ring-ink/40' : 'border-transparent'
-              }`
-            }
-          >
+    <nav>
+      <select
+        value={currentId}
+        onChange={(e) => {
+          if (e.target.value) navigate(`/module/${e.target.value}`);
+        }}
+        className="w-full sm:w-auto max-w-full sm:max-w-xs border border-rule bg-white/70 px-3 py-1.5 text-sm outline-none focus:border-alert"
+        aria-label="選擇主題"
+      >
+        <option value="" disabled>
+          學習資料…
+        </option>
+        {MODULES.map((m) => (
+          <option key={m.id} value={m.id}>
             {m.title}
-          </NavLink>
-        );
-      })}
+          </option>
+        ))}
+      </select>
     </nav>
   );
 }

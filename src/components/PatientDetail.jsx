@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getPatient, addLog, deleteLog, updatePatient, deletePatient } from '../api';
+import { getPatient, updatePatient, deletePatient, addVaccineEvent, deleteVaccineEvent } from '../api';
 import { useAuth } from './AuthContext';
-import { ageInDays, formatDate, formatGa } from '../utils/clinical';
+import { computeAge, formatDate, formatGa, dayCount } from '../utils/clinical';
+import { groupConsecutiveByDate } from '../utils/timeline';
 import jaundiceData from '../data/jaundice.json';
 import tpnData from '../data/tpn.json';
+import RemindersPanel from './RemindersPanel';
+import RoundsForm from './RoundsForm';
+import LinesSection from './LinesSection';
 
 const bilCalc = jaundiceData.sections.find((s) => s.id === 'bilirubin-standards').calculator;
 const tpnCalc = tpnData.sections.find((s) => s.calculator)?.calculator;
@@ -29,16 +33,12 @@ function nearestDayIndex(dayColumns, ageDays) {
   return best;
 }
 
-const emptyLog = { logDate: new Date().toISOString().slice(0, 10), weightGrams: '', tdfMlKgDay: '', feedingMl: '', note: '' };
-
 export default function PatientDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { onUnauthorized } = useAuth();
   const [patient, setPatient] = useState(null);
   const [error, setError] = useState('');
-  const [logForm, setLogForm] = useState(emptyLog);
-  const [saving, setSaving] = useState(false);
   const [currentBili, setCurrentBili] = useState('');
 
   async function load() {
@@ -56,35 +56,6 @@ export default function PatientDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  async function handleAddLog(e) {
-    e.preventDefault();
-    setSaving(true);
-    setError('');
-    try {
-      await addLog(id, {
-        ...logForm,
-        weightGrams: logForm.weightGrams ? Number(logForm.weightGrams) : null,
-        tdfMlKgDay: logForm.tdfMlKgDay ? Number(logForm.tdfMlKgDay) : null,
-        feedingMl: logForm.feedingMl ? Number(logForm.feedingMl) : null,
-      });
-      setLogForm(emptyLog);
-      load();
-    } catch (e2) {
-      setError(e2.message);
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function handleDeleteLog(logId) {
-    try {
-      await deleteLog(logId);
-      load();
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
   async function handleDischarge() {
     await updatePatient(id, { status: patient.status === 'active' ? 'discharged' : 'active' });
     load();
@@ -96,11 +67,33 @@ export default function PatientDetail() {
     navigate('/patients');
   }
 
+  async function handleLogVaccine(vaccineType, doseNumber) {
+    try {
+      await addVaccineEvent(id, { vaccineType, eventDate: new Date().toISOString().slice(0, 10), doseNumber });
+      load();
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
+  async function handleDeleteVaccine(eventId) {
+    try {
+      await deleteVaccineEvent(eventId);
+      load();
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
   if (error) return <div className="text-alert">{error}</div>;
   if (!patient) return <div className="text-sm text-ink/50">載入中…</div>;
 
-  const days = ageInDays(patient.birthDate);
-  const latestWeight = patient.logs?.[0]?.weightGrams || patient.birthWeightGrams;
+  const roundsAsc = [...patient.rounds].sort((a, b) => new Date(a.recordDate) - new Date(b.recordDate));
+  const roundsDesc = [...roundsAsc].reverse();
+  const mostRecentRound = roundsDesc[0] || null;
+  const age = computeAge(patient.gaWeeks, patient.gaDays, patient.birthDate);
+  const days = dayCount(patient.birthDate);
+  const latestWeight = mostRecentRound?.weightGrams || patient.birthWeightGrams;
 
   // auto-applied bilirubin lookup
   const groupIdx = gaGroupIndex(bilCalc.gaGroups, patient.gaWeeks);
@@ -117,13 +110,16 @@ export default function PatientDetail() {
     else zone = { label: '未達照光標準', cls: 'bg-stable/10 border-stable text-stable' };
   }
 
+  const respRanges = groupConsecutiveByDate(roundsAsc, (r) => r.respMode).reverse();
+  const tpnRanges = groupConsecutiveByDate(roundsAsc, (r) => (r.tpnActive ? 'TPN' : null)).reverse();
+
   return (
     <div>
       <Link to="/patients" className="text-sm text-ink/50 underline">
         ← 回病人列表
       </Link>
 
-      <div className="flex items-center justify-between mt-2 mb-4">
+      <div className="flex items-center justify-between mt-2 mb-1">
         <h1 className="font-display text-2xl font-bold">{patient.identifier}</h1>
         <div className="flex gap-2">
           <button onClick={handleDischarge} className="text-xs border border-rule px-2 py-1 bg-white/50">
@@ -134,15 +130,29 @@ export default function PatientDetail() {
           </button>
         </div>
       </div>
+      <p className="text-sm text-ink/60 mb-4">查房指引</p>
 
       <div className="border border-rule bg-white/50 p-3 mb-4 text-sm grid sm:grid-cols-2 gap-x-6 gap-y-1">
         <div>GA：{formatGa(patient.gaWeeks, patient.gaDays)}</div>
         <div>出生日期：{formatDate(patient.birthDate)}</div>
         <div>出生體重：{patient.birthWeightGrams} g</div>
-        <div className="readout">目前日齡：{days.toFixed(1)} day</div>
+        <div className="readout font-medium">{age.label}</div>
+        {patient.edc && <div>EDC：{formatDate(patient.edc)}</div>}
+        {patient.gpa && <div>GPA：{patient.gpa}</div>}
+        {patient.deliveryMethod && <div>生產方式：{patient.deliveryMethod}</div>}
+        {(patient.apgar1min != null || patient.apgar5min != null) && (
+          <div>
+            Apgar：{patient.apgar1min ?? '—'} / {patient.apgar5min ?? '—'}
+          </div>
+        )}
         <div className="readout">目前體重（最新記錄）：{latestWeight} g</div>
         <div>狀態：{patient.status === 'active' ? '在院' : '已出院'}</div>
         {patient.note && <div className="sm:col-span-2 text-ink/70">備註：{patient.note}</div>}
+      </div>
+
+      <h2 className="font-display text-lg font-semibold mb-2">提醒事項</h2>
+      <div className="mb-6">
+        <RemindersPanel patient={patient} rounds={patient.rounds} vaccineEvents={patient.vaccineEvents} onLogVaccine={handleLogVaccine} />
       </div>
 
       {/* auto-applied clinical calculators */}
@@ -199,97 +209,102 @@ export default function PatientDetail() {
         )}
       </div>
 
-      {/* daily log */}
-      <h2 className="font-display text-lg font-semibold mb-2">每日紀錄</h2>
-      <form onSubmit={handleAddLog} className="border border-rule bg-white/50 p-3 mb-4 grid sm:grid-cols-5 gap-2 items-end">
-        <label className="text-xs flex flex-col gap-1">
-          日期
-          <input
-            type="date"
-            required
-            value={logForm.logDate}
-            onChange={(e) => setLogForm({ ...logForm, logDate: e.target.value })}
-            className="border border-rule px-2 py-1 text-sm readout"
-          />
-        </label>
-        <label className="text-xs flex flex-col gap-1">
-          體重 (g)
-          <input
-            type="number"
-            value={logForm.weightGrams}
-            onChange={(e) => setLogForm({ ...logForm, weightGrams: e.target.value })}
-            className="border border-rule px-2 py-1 text-sm readout"
-          />
-        </label>
-        <label className="text-xs flex flex-col gap-1">
-          TDF (ml/kg/day)
-          <input
-            type="number"
-            value={logForm.tdfMlKgDay}
-            onChange={(e) => setLogForm({ ...logForm, tdfMlKgDay: e.target.value })}
-            className="border border-rule px-2 py-1 text-sm readout"
-          />
-        </label>
-        <label className="text-xs flex flex-col gap-1">
-          餵奶量 (ml)
-          <input
-            type="number"
-            value={logForm.feedingMl}
-            onChange={(e) => setLogForm({ ...logForm, feedingMl: e.target.value })}
-            className="border border-rule px-2 py-1 text-sm readout"
-          />
-        </label>
-        <button type="submit" disabled={saving} className="border border-ink bg-ink text-paper px-3 py-1.5 text-sm font-medium disabled:opacity-50">
-          {saving ? '新增中…' : '+ 新增紀錄'}
-        </button>
-        <label className="text-xs flex flex-col gap-1 sm:col-span-5">
-          備註
-          <input
-            value={logForm.note}
-            onChange={(e) => setLogForm({ ...logForm, note: e.target.value })}
-            className="border border-rule px-2 py-1 text-sm"
-          />
-        </label>
-      </form>
+      <h2 className="font-display text-lg font-semibold mb-2">今日查房紀錄</h2>
+      <div className="mb-6">
+        <RoundsForm patientId={id} birthWeightGrams={patient.birthWeightGrams} mostRecentRound={mostRecentRound} onSaved={load} />
+      </div>
+
+      {(respRanges.length > 0 || tpnRanges.length > 0) && (
+        <div className="mb-6 space-y-2 text-sm">
+          {respRanges.length > 0 && (
+            <div>
+              <span className="font-medium">呼吸支持：</span>
+              {respRanges.map((r, i) => (
+                <span key={i} className="readout mr-2">
+                  {r.key}({formatDate(r.start)}–{r.end === roundsDesc[0]?.recordDate ? '' : formatDate(r.end)})
+                </span>
+              ))}
+            </div>
+          )}
+          {tpnRanges.length > 0 && (
+            <div>
+              <span className="font-medium">TPN：</span>
+              {tpnRanges.map((r, i) => (
+                <span key={i} className="readout mr-2">
+                  ({formatDate(r.start)}–{formatDate(r.end)})
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {error && <div className="text-sm text-alert mb-3">{error}</div>}
 
-      <div className="border border-rule overflow-x-auto">
+      <h2 className="font-display text-lg font-semibold mb-2">查房紀錄歷史</h2>
+      <div className="border border-rule overflow-x-auto mb-6">
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="bg-ink/[0.06]">
-              {['日期', '體重 (g)', 'TDF', '餵奶量 (ml)', '備註', ''].map((h) => (
-                <th key={h} className="text-left font-medium px-3 py-2 border-b border-rule">
+              {['日期', '體重(g)', '呼吸', 'Feeding', 'TDF醫囑', 'TPN', '診斷'].map((h) => (
+                <th key={h} className="text-left font-medium px-3 py-2 border-b border-rule whitespace-nowrap">
                   {h}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {patient.logs?.length === 0 && (
+            {roundsDesc.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-3 py-3 text-ink/50">
+                <td colSpan={7} className="px-3 py-3 text-ink/50">
                   尚無紀錄
                 </td>
               </tr>
             )}
-            {patient.logs?.map((log) => (
-              <tr key={log.id}>
-                <td className="px-3 py-2 border-b border-rule/70 readout">{formatDate(log.logDate)}</td>
-                <td className="px-3 py-2 border-b border-rule/70 readout">{log.weightGrams ?? '—'}</td>
-                <td className="px-3 py-2 border-b border-rule/70 readout">{log.tdfMlKgDay ?? '—'}</td>
-                <td className="px-3 py-2 border-b border-rule/70 readout">{log.feedingMl ?? '—'}</td>
-                <td className="px-3 py-2 border-b border-rule/70">{log.note}</td>
-                <td className="px-3 py-2 border-b border-rule/70">
-                  <button onClick={() => handleDeleteLog(log.id)} className="text-xs text-alert underline">
-                    刪除
-                  </button>
+            {roundsDesc.map((r) => (
+              <tr key={r.id}>
+                <td className="px-3 py-2 border-b border-rule/70 readout whitespace-nowrap">{formatDate(r.recordDate)}</td>
+                <td className="px-3 py-2 border-b border-rule/70 readout">{r.weightGrams ?? '—'}</td>
+                <td className="px-3 py-2 border-b border-rule/70 readout whitespace-nowrap">
+                  {r.respMode}
+                  {r.respNote ? `(${r.respNote})` : ''}
                 </td>
+                <td className="px-3 py-2 border-b border-rule/70 whitespace-nowrap">
+                  {r.feedingRoute} {r.feedingMode === 'alternating' ? `${r.feedingTypeA}/${r.feedingTypeB}` : r.feedingTypeA}{' '}
+                  {r.feedingVolPerFeed}ml {r.feedingFrequency}
+                </td>
+                <td className="px-3 py-2 border-b border-rule/70 readout">{r.tdfOrdered ?? '—'}</td>
+                <td className="px-3 py-2 border-b border-rule/70">{r.tpnActive ? '是' : '—'}</td>
+                <td className="px-3 py-2 border-b border-rule/70">{r.diagnosis}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <h2 className="font-display text-lg font-semibold mb-2">管路</h2>
+      <div className="mb-6">
+        <LinesSection patientId={id} lines={patient.lines} onChanged={load} />
+      </div>
+
+      {patient.vaccineEvents.length > 0 && (
+        <>
+          <h2 className="font-display text-lg font-semibold mb-2">疫苗／單株抗體施打紀錄</h2>
+          <div className="border border-rule bg-white/50 p-3 mb-6 space-y-1.5 text-sm">
+            {patient.vaccineEvents.map((v) => (
+              <div key={v.id} className="flex justify-between items-center border-b border-rule/60 pb-1.5 last:border-b-0">
+                <span>
+                  {v.vaccineType.toUpperCase()}
+                  {v.doseNumber ? ` 第${v.doseNumber}劑` : ''} — <span className="readout">{formatDate(v.eventDate)}</span>
+                </span>
+                <button onClick={() => handleDeleteVaccine(v.id)} className="text-xs text-alert underline">
+                  刪除
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
