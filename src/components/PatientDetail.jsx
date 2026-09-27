@@ -116,9 +116,14 @@ export default function PatientDetail() {
 
   return (
     <div>
-      <Link to="/patients" className="text-sm text-ink/50 underline">
-        ← 回病人列表
-      </Link>
+      <div className="flex items-center gap-3 text-sm text-ink/50">
+        <Link to="/patients" className="underline">
+          ← 回病人列表
+        </Link>
+        <Link to="/patients/handoff" className="underline">
+          病人總表
+        </Link>
+      </div>
 
       <div className="flex items-center justify-between mt-2 mb-1">
         <h1 className="font-display text-2xl font-bold">{patient.identifier}</h1>
@@ -217,7 +222,13 @@ export default function PatientDetail() {
 
       <h2 className="font-display text-lg font-semibold mb-2">今日查房紀錄</h2>
       <div className="mb-6">
-        <RoundsForm patientId={id} birthWeightGrams={patient.birthWeightGrams} mostRecentRound={mostRecentRound} onSaved={load} />
+        <RoundsForm
+          key={mostRecentRound ? `${mostRecentRound.id}-${mostRecentRound.updatedAt}` : 'new'}
+          patientId={id}
+          birthWeightGrams={patient.birthWeightGrams}
+          mostRecentRound={mostRecentRound}
+          onSaved={load}
+        />
       </div>
 
       {(respRanges.length > 0 || tpnRanges.length > 0) && (

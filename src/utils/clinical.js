@@ -78,3 +78,16 @@ export function addDays(date, days) {
   d.setDate(d.getDate() + days);
   return d;
 }
+
+// e.g. "G2P1A0, GA 32+1, NSD, AS 3>7, BBW 2175gm"
+export function birthHistoryDefault(patient) {
+  const parts = [];
+  if (patient.gpa) parts.push(patient.gpa);
+  parts.push(`GA ${patient.gaWeeks}+${patient.gaDays ?? 0}`);
+  if (patient.deliveryMethod) parts.push(patient.deliveryMethod);
+  if (patient.apgar1min != null && patient.apgar5min != null) {
+    parts.push(`AS ${patient.apgar1min}>${patient.apgar5min}`);
+  }
+  parts.push(`BBW ${patient.birthWeightGrams}gm`);
+  return parts.join(', ');
+}

@@ -61,6 +61,7 @@ export function hbvStatus(patient, rounds, vaccineEvents) {
   const hbv2 = vaccineEvents.find((v) => v.vaccineType === 'hbv2');
 
   const hbv1Due = !hbv1 && (currentWeight >= 2000 || today >= 30);
+  const hbv1LatestByAgeDate = addDays(new Date(patient.birthDate), 30);
   let hbv2Due = false;
   let hbv2EarliestDate = null;
   if (hbv1 && !hbv2) {
@@ -68,7 +69,7 @@ export function hbvStatus(patient, rounds, vaccineEvents) {
     hbv2Due = new Date() >= hbv2EarliestDate;
   }
 
-  return { hbv1Given: hbv1 || null, hbv2Given: hbv2 || null, hbv1Due, hbv2Due, hbv2EarliestDate };
+  return { hbv1Given: hbv1 || null, hbv2Given: hbv2 || null, hbv1Due, hbv1LatestByAgeDate, hbv2Due, hbv2EarliestDate };
 }
 
 // ---- Vit D / Fe / 滿月血 / BPD survey (oTDF or PMA based) ----
@@ -87,6 +88,8 @@ export function nutritionMilestones(patient, rounds) {
     feNote: '80–120 都是可以開始添加的時間',
     fullMonthBloodDue: preterm && latestOtdf != null && latestOtdf >= 120,
     bpdSurveyDue: preterm && birthGaDays <= 31 * 7 + 6 && pmaTotalDays >= 36 * 7,
+    bpdSurveyApplicable: preterm && birthGaDays <= 31 * 7 + 6,
+    bpdSurveyTargetDate: preterm && birthGaDays <= 31 * 7 + 6 ? addDays(new Date(patient.birthDate), Math.max(0, 36 * 7 - birthGaDays)) : null,
   };
 }
 
@@ -105,6 +108,7 @@ export function brainEchoStatus(patient) {
   const today = dayCount(patient.birthDate);
   const milestones = dueDays.map((d) => ({
     day: d,
+    date: addDays(new Date(patient.birthDate), d),
     status: today < d ? 'upcoming' : today === d ? 'due-today' : 'past',
   }));
   return { eligible: true, milestones, sourceRef: screeningData.sections.find((s) => s.id === 'brain-echo')?.title };

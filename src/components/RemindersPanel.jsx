@@ -46,7 +46,7 @@ export default function RemindersPanel({ patient, rounds, vaccineEvents, onLogVa
             </button>
           </div>
         ) : (
-          '尚未符合條件'
+          <>尚未符合條件，最晚 {formatDate(r.hbv.hbv1LatestByAgeDate)} 前會滿1個月大（若體重先達2000g則提前）</>
         )}
       </Card>
 
@@ -85,9 +85,13 @@ export default function RemindersPanel({ patient, rounds, vaccineEvents, onLogVa
           oTDF 已達 {r.nutrition.latestOtdf.toFixed(0)}（≥120），提醒抽血
         </Card>
       )}
-      {r.nutrition.bpdSurveyDue && (
-        <Card tone="warn" title="BPD survey">
-          已達 PMA 36+0 週，提醒進行 BPD survey
+      {r.nutrition.bpdSurveyApplicable && (
+        <Card tone={r.nutrition.bpdSurveyDue ? 'warn' : 'neutral'} title="BPD survey">
+          {r.nutrition.bpdSurveyDue ? (
+            <>已達 PMA 36+0 週，提醒進行 BPD survey</>
+          ) : (
+            <>預計 {formatDate(r.nutrition.bpdSurveyTargetDate)} 達到 PMA 36+0 週，屆時提醒</>
+          )}
         </Card>
       )}
 
@@ -105,7 +109,7 @@ export default function RemindersPanel({ patient, rounds, vaccineEvents, onLogVa
                     : 'border-rule text-ink/70'
                 }`}
               >
-                Day {m.day}
+                Day {m.day}（{formatDate(m.date)}）
                 {m.status === 'due-today' && '（今天）'}
               </span>
             ))}

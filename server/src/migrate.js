@@ -34,6 +34,7 @@ ALTER TABLE patients ADD COLUMN IF NOT EXISTS diagnosis TEXT;
 ALTER TABLE patients ADD COLUMN IF NOT EXISTS data_summary TEXT;
 ALTER TABLE patients ADD COLUMN IF NOT EXISTS management_summary TEXT;
 ALTER TABLE patients ADD COLUMN IF NOT EXISTS course_plan_summary TEXT;
+ALTER TABLE patients ADD COLUMN IF NOT EXISTS birth_history_note TEXT;
 
 CREATE TABLE IF NOT EXISTS daily_logs (
   id             TEXT PRIMARY KEY,
