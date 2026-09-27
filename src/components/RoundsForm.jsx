@@ -3,7 +3,7 @@ import { upsertRound } from '../api';
 import { computeOtdf } from '../utils/reminders';
 
 const RESP_OPTIONS = ['RA', 'NCPAP', 'NIPPV', 'SIMV', 'SIMV+PS', 'HFOV'];
-const FEEDING_TYPES = ['BM', 'IF', 'PDF', '(22)PF', '(24)PF', 'BM+HMF(50)', 'BM+HMF(25)'];
+const FEEDING_TYPES = ['NPO', 'BM', 'IF', 'PDF', '(22)PF', '(24)PF', 'BM+HMF(50)', 'BM+HMF(25)'];
 
 function today() {
   return new Date().toISOString().slice(0, 10);

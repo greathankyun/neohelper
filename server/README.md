@@ -4,7 +4,7 @@
 
 ## ⚠️ 如果你已經部署過舊版，這次更新必須重新跑一次 migrate
 
-這次新增了「交班總表」功能，資料庫多了 5 個文字欄位（diagnosis / data_summary / management_summary / course_plan_summary / birth_history_note）。**你現有 Neon 資料庫裡的病人資料不會不見**，但必須讓資料庫結構跟上，不然新功能會出錯。做法（跟你上次手動跑 migrate 的方式一樣）：
+這次新增了「交班總表」功能，資料庫多了 6 個文字欄位（diagnosis / data_summary / management_summary / course_plan_summary / birth_history_note / chart_number）。**你現有 Neon 資料庫裡的病人資料不會不見**，但必須讓資料庫結構跟上，不然新功能會出錯。做法（跟你上次手動跑 migrate 的方式一樣）：
 
 ```bash
 cd server

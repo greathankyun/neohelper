@@ -35,6 +35,7 @@ function patientRowToJson(row) {
     managementSummary: row.management_summary,
     coursePlanSummary: row.course_plan_summary,
     birthHistoryNote: row.birth_history_note,
+    chartNumber: row.chart_number,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -159,6 +160,7 @@ const CREATE_FIELD_MAP = {
   management_summary: 'managementSummary',
   course_plan_summary: 'coursePlanSummary',
   birth_history_note: 'birthHistoryNote',
+  chart_number: 'chartNumber',
 };
 const NUMERIC_COLS = ['ga_weeks', 'ga_days', 'birth_weight_grams', 'apgar_1min', 'apgar_5min'];
 const DATE_COLS = ['birth_date', 'edc'];

@@ -29,7 +29,7 @@ export function computeAge(gaWeeks, gaDays, birthDate, ref = new Date()) {
   const birthGaDays = birthGaTotalDays(gaWeeks, gaDays);
   const term = isTermAtBirth(gaWeeks, gaDays);
   if (term) {
-    return { dayCount: d, isTerm: true, label: `Day ${d}` };
+    return { dayCount: d, isTerm: true, label: `${d} d/o` };
   }
   const pmaTotalDays = birthGaDays + d;
   const pmaWeeks = Math.floor(pmaTotalDays / 7);
@@ -41,7 +41,7 @@ export function computeAge(gaWeeks, gaDays, birthDate, ref = new Date()) {
       pmaWeeks,
       pmaDays,
       pmaTotalDays,
-      label: `Day ${d}（PMA ${pmaWeeks}+${pmaDays}/7 週）`,
+      label: `${d} d/o（PMA ${pmaWeeks}+${pmaDays}/7 週）`,
     };
   }
   const caDays = pmaTotalDays - 280;
@@ -50,7 +50,7 @@ export function computeAge(gaWeeks, gaDays, birthDate, ref = new Date()) {
     isTerm: false,
     pmaTotalDays,
     caDays,
-    label: `Day ${d}（CA ${caDays}d）`,
+    label: `${d} d/o（CA ${caDays}d）`,
   };
 }
 

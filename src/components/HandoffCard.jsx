@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { updatePatient } from '../api';
-import { computeAge, formatGa, formatDate, birthHistoryDefault } from '../utils/clinical';
+import { computeAge, formatDate, birthHistoryDefault } from '../utils/clinical';
 import { groupConsecutiveByDate } from '../utils/timeline';
 import { feedingDisplay } from '../utils/reminders';
 
@@ -12,14 +12,31 @@ const COLUMNS = [
   { key: 'coursePlanSummary', label: 'Course + Plan' },
 ];
 
+// ~~text~~ renders as light gray — the user's own manual markup for flagging
+// expired/discontinued items (a med, a line, a vent mode) without deleting the entry.
+function renderGrayMarkup(line) {
+  const parts = line.split(/(~~.+?~~)/g);
+  return parts.map((part, i) => {
+    const m = part.match(/^~~(.+)~~$/);
+    if (m) {
+      return (
+        <span key={i} className="text-ink/30">
+          {m[1]}
+        </span>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 function MultiLine({ text, placeholder }) {
   if (!text) return <div className="text-sm text-ink/30">{placeholder}</div>;
   const lines = text.split('\n').filter((l) => l.trim() !== '');
   return (
-    <div className="space-y-0.5">
+    <div className="space-y-0.5 overflow-x-auto">
       {lines.map((line, i) => (
-        <div key={i} className="text-sm">
-          {line}
+        <div key={i} className="text-sm whitespace-nowrap">
+          {renderGrayMarkup(line)}
         </div>
       ))}
     </div>
@@ -28,6 +45,42 @@ function MultiLine({ text, placeholder }) {
 
 function ColumnHeader({ children }) {
   return <div className="text-xs font-mono uppercase tracking-wide text-ink/50 mb-1">{children}</div>;
+}
+
+// Textarea with a "灰化選取文字" button: select some text, click it, and that
+// substring gets wrapped in ~~ ~~ so it renders gray without being deleted.
+function GrayableTextarea({ value, onChange }) {
+  const ref = useRef(null);
+
+  function grayOutSelection() {
+    const el = ref.current;
+    if (!el) return;
+    const { selectionStart, selectionEnd } = el;
+    if (selectionStart === selectionEnd) return;
+    const before = value.slice(0, selectionStart);
+    const selected = value.slice(selectionStart, selectionEnd);
+    const after = value.slice(selectionEnd);
+    onChange(`${before}~~${selected}~~${after}`);
+  }
+
+  return (
+    <div>
+      <textarea
+        ref={ref}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="border border-rule px-2 py-1 text-sm min-h-[5rem] w-full"
+      />
+      <button
+        type="button"
+        onClick={grayOutSelection}
+        className="text-xs border border-rule px-1.5 py-0.5 mt-1 bg-white/70 text-ink/60"
+        title="先反白要標記的文字，再按這個按鈕"
+      >
+        反白文字→變灰（已到期/停用）
+      </button>
+    </div>
+  );
 }
 
 function StatusSnapshot({ patient, rounds, showIdentifier }) {
@@ -52,9 +105,7 @@ function StatusSnapshot({ patient, rounds, showIdentifier }) {
   return (
     <div className="text-sm leading-relaxed space-y-1">
       {showIdentifier && <div className="font-display font-semibold">{patient.identifier}</div>}
-      <div className="readout text-xs text-ink/60">
-        {formatGa(patient.gaWeeks, patient.gaDays)}／出生 {formatDate(patient.birthDate)}／{age.label}
-      </div>
+      <div className="readout text-xs text-ink/60">{age.label}</div>
       <div className="readout text-xs">{weightLine}</div>
       {respRanges.length > 0 && (
         <div className="readout text-xs">
@@ -131,11 +182,11 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
           <>
             <div className="sm:border-r sm:border-rule sm:pr-3">
               <ColumnHeader>Diagnosis</ColumnHeader>
-              <div className="text-sm mb-1">
+              <MultiLine text={patient.diagnosis} placeholder="（尚未填寫）" />
+              <div className="text-sm mt-1.5">
                 <span className="text-ink/50">Birth history：</span>
                 {displayedBirthHistory}
               </div>
-              <MultiLine text={patient.diagnosis} placeholder="（尚未填寫）" />
             </div>
             {COLUMNS.slice(1).map(({ key, label }, i) => (
               <div key={key} className={i < COLUMNS.length - 2 ? 'sm:border-r sm:border-rule sm:pr-3' : ''}>
@@ -148,7 +199,8 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
           <div className="sm:col-span-4 grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
               <ColumnHeader>Diagnosis</ColumnHeader>
-              <label className="text-xs flex flex-col gap-1 mb-1.5">
+              <GrayableTextarea value={form.diagnosis} onChange={(v) => setForm({ ...form, diagnosis: v })} />
+              <label className="text-xs flex flex-col gap-1 mt-1.5">
                 Birth history（已依出生資料自動帶入，可直接修改）
                 <input
                   value={form.birthHistoryNote}
@@ -156,26 +208,11 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
                   className="border border-rule px-2 py-1 text-sm"
                 />
               </label>
-              <label className="text-xs flex flex-col gap-1">
-                每行一項，Enter 換行
-                <textarea
-                  value={form.diagnosis}
-                  onChange={(e) => setForm({ ...form, diagnosis: e.target.value })}
-                  className="border border-rule px-2 py-1 text-sm min-h-[5rem]"
-                />
-              </label>
             </div>
             {COLUMNS.slice(1).map(({ key, label }) => (
               <div key={key}>
                 <ColumnHeader>{label}</ColumnHeader>
-                <label className="text-xs flex flex-col gap-1">
-                  每行一項，Enter 換行
-                  <textarea
-                    value={form[key]}
-                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                    className="border border-rule px-2 py-1 text-sm min-h-[5rem]"
-                  />
-                </label>
+                <GrayableTextarea value={form[key]} onChange={(v) => setForm({ ...form, [key]: v })} />
               </div>
             ))}
           </div>
@@ -188,7 +225,7 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
             編輯交班摘要
           </button>
         ) : (
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center flex-wrap">
             <button
               onClick={handleSave}
               disabled={saving}
@@ -199,6 +236,7 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
             <button onClick={() => setEditing(false)} className="text-xs border border-rule px-3 py-1 bg-white/70">
               取消
             </button>
+            <span className="text-xs text-ink/50">每行一項，Enter 換行；不會自動換行</span>
             {error && <span className="text-xs text-alert">{error}</span>}
           </div>
         )}

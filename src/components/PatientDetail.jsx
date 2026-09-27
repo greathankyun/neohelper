@@ -34,6 +34,18 @@ function nearestDayIndex(dayColumns, ageDays) {
   return best;
 }
 
+function toDatetimeLocal(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function toDateInput(iso) {
+  if (!iso) return '';
+  return new Date(iso).toISOString().slice(0, 10);
+}
+
 export default function PatientDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -41,6 +53,9 @@ export default function PatientDetail() {
   const [patient, setPatient] = useState(null);
   const [error, setError] = useState('');
   const [currentBili, setCurrentBili] = useState('');
+  const [editingInfo, setEditingInfo] = useState(false);
+  const [infoForm, setInfoForm] = useState(null);
+  const [savingInfo, setSavingInfo] = useState(false);
 
   async function load() {
     try {
@@ -86,6 +101,42 @@ export default function PatientDetail() {
     }
   }
 
+  function openEditInfo() {
+    setInfoForm({
+      identifier: patient.identifier,
+      chartNumber: patient.chartNumber || '',
+      gaWeeks: patient.gaWeeks,
+      gaDays: patient.gaDays,
+      birthDate: toDatetimeLocal(patient.birthDate),
+      birthWeightGrams: patient.birthWeightGrams,
+      edc: toDateInput(patient.edc),
+      gpa: patient.gpa || '',
+      deliveryMethod: patient.deliveryMethod || '',
+      apgar1min: patient.apgar1min ?? '',
+      apgar5min: patient.apgar5min ?? '',
+      note: patient.note || '',
+    });
+    setEditingInfo(true);
+  }
+
+  async function handleSaveInfo() {
+    setSavingInfo(true);
+    setError('');
+    try {
+      await updatePatient(id, {
+        ...infoForm,
+        apgar1min: infoForm.apgar1min === '' ? undefined : Number(infoForm.apgar1min),
+        apgar5min: infoForm.apgar5min === '' ? undefined : Number(infoForm.apgar5min),
+      });
+      setEditingInfo(false);
+      load();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSavingInfo(false);
+    }
+  }
+
   if (error) return <div className="text-alert">{error}</div>;
   if (!patient) return <div className="text-sm text-ink/50">載入中…</div>;
 
@@ -126,7 +177,15 @@ export default function PatientDetail() {
       </div>
 
       <div className="flex items-center justify-between mt-2 mb-1">
-        <h1 className="font-display text-2xl font-bold">{patient.identifier}</h1>
+        {editingInfo ? (
+          <input
+            value={infoForm.identifier}
+            onChange={(e) => setInfoForm({ ...infoForm, identifier: e.target.value })}
+            className="font-display text-2xl font-bold border border-rule px-2 py-0.5"
+          />
+        ) : (
+          <h1 className="font-display text-2xl font-bold">{patient.identifier}</h1>
+        )}
         <div className="flex gap-2">
           <button onClick={handleDischarge} className="text-xs border border-rule px-2 py-1 bg-white/50">
             {patient.status === 'active' ? '標記為已出院' : '標記為在院'}
@@ -136,25 +195,159 @@ export default function PatientDetail() {
           </button>
         </div>
       </div>
-      <p className="text-sm text-ink/60 mb-4">查房指引</p>
+      <p className="text-sm text-ink/60 mb-1">查房指引</p>
 
-      <div className="border border-rule bg-white/50 p-3 mb-4 text-sm grid sm:grid-cols-2 gap-x-6 gap-y-1">
-        <div>GA：{formatGa(patient.gaWeeks, patient.gaDays)}</div>
-        <div>出生日期：{formatDate(patient.birthDate)}</div>
-        <div>出生體重：{patient.birthWeightGrams} g</div>
-        <div className="readout font-medium">{age.label}</div>
-        {patient.edc && <div>EDC：{formatDate(patient.edc)}</div>}
-        {patient.gpa && <div>GPA：{patient.gpa}</div>}
-        {patient.deliveryMethod && <div>生產方式：{patient.deliveryMethod}</div>}
-        {(patient.apgar1min != null || patient.apgar5min != null) && (
-          <div>
-            Apgar：{patient.apgar1min ?? '—'} / {patient.apgar5min ?? '—'}
+      {!editingInfo ? (
+        <div className="text-sm mb-1">
+          病歷號：{patient.chartNumber || <span className="text-ink/30">（尚未填寫）</span>}
+        </div>
+      ) : (
+        <label className="text-sm flex items-center gap-2 mb-2">
+          病歷號
+          <input
+            value={infoForm.chartNumber}
+            onChange={(e) => setInfoForm({ ...infoForm, chartNumber: e.target.value })}
+            className="border border-rule px-2 py-1 text-sm"
+          />
+        </label>
+      )}
+
+      {!editingInfo ? (
+        <div className="border border-rule bg-white/50 p-3 mb-4 text-sm grid sm:grid-cols-2 gap-x-6 gap-y-1">
+          <div>GA：{formatGa(patient.gaWeeks, patient.gaDays)}</div>
+          <div>出生日期：{formatDate(patient.birthDate)}</div>
+          <div>出生體重：{patient.birthWeightGrams} g</div>
+          <div className="readout font-medium">{age.label}</div>
+          {patient.edc && <div>EDC：{formatDate(patient.edc)}</div>}
+          {patient.gpa && <div>GPA：{patient.gpa}</div>}
+          {patient.deliveryMethod && <div>生產方式：{patient.deliveryMethod}</div>}
+          {(patient.apgar1min != null || patient.apgar5min != null) && (
+            <div>
+              Apgar：{patient.apgar1min ?? '—'} / {patient.apgar5min ?? '—'}
+            </div>
+          )}
+          <div className="readout">目前體重（最新記錄）：{latestWeight} g</div>
+          <div>狀態：{patient.status === 'active' ? '在院' : '已出院'}</div>
+          {patient.note && <div className="sm:col-span-2 text-ink/70">備註：{patient.note}</div>}
+          <div className="sm:col-span-2">
+            <button onClick={openEditInfo} className="text-xs border border-rule px-2 py-1 bg-white/70">
+              編輯病人資料
+            </button>
           </div>
-        )}
-        <div className="readout">目前體重（最新記錄）：{latestWeight} g</div>
-        <div>狀態：{patient.status === 'active' ? '在院' : '已出院'}</div>
-        {patient.note && <div className="sm:col-span-2 text-ink/70">備註：{patient.note}</div>}
-      </div>
+        </div>
+      ) : (
+        <div className="border border-rule bg-white/50 p-3 mb-4 text-sm grid sm:grid-cols-2 gap-3">
+          <label className="flex flex-col gap-1">
+            GA 完整週數
+            <input
+              type="number"
+              value={infoForm.gaWeeks}
+              onChange={(e) => setInfoForm({ ...infoForm, gaWeeks: e.target.value })}
+              className="border border-rule px-2 py-1 readout"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            GA 額外天數 (0-6)
+            <input
+              type="number"
+              min="0"
+              max="6"
+              value={infoForm.gaDays}
+              onChange={(e) => setInfoForm({ ...infoForm, gaDays: e.target.value })}
+              className="border border-rule px-2 py-1 readout"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            出生日期時間
+            <input
+              type="datetime-local"
+              value={infoForm.birthDate}
+              onChange={(e) => setInfoForm({ ...infoForm, birthDate: e.target.value })}
+              className="border border-rule px-2 py-1 readout"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            出生體重 (g)
+            <input
+              type="number"
+              value={infoForm.birthWeightGrams}
+              onChange={(e) => setInfoForm({ ...infoForm, birthWeightGrams: e.target.value })}
+              className="border border-rule px-2 py-1 readout"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            EDC 預產期
+            <input
+              type="date"
+              value={infoForm.edc}
+              onChange={(e) => setInfoForm({ ...infoForm, edc: e.target.value })}
+              className="border border-rule px-2 py-1 readout"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            GPA
+            <input
+              value={infoForm.gpa}
+              onChange={(e) => setInfoForm({ ...infoForm, gpa: e.target.value })}
+              className="border border-rule px-2 py-1"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            出生方式
+            <select
+              value={infoForm.deliveryMethod}
+              onChange={(e) => setInfoForm({ ...infoForm, deliveryMethod: e.target.value })}
+              className="border border-rule px-2 py-1"
+            >
+              <option value="">未選擇</option>
+              <option value="NSD">NSD</option>
+              <option value="VED">VED</option>
+              <option value="CS">CS</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1">
+            Apgar (1min / 5min)
+            <div className="flex gap-2">
+              <input
+                type="number"
+                min="0"
+                max="10"
+                value={infoForm.apgar1min}
+                onChange={(e) => setInfoForm({ ...infoForm, apgar1min: e.target.value })}
+                className="border border-rule px-2 py-1 readout w-full"
+              />
+              <input
+                type="number"
+                min="0"
+                max="10"
+                value={infoForm.apgar5min}
+                onChange={(e) => setInfoForm({ ...infoForm, apgar5min: e.target.value })}
+                className="border border-rule px-2 py-1 readout w-full"
+              />
+            </div>
+          </label>
+          <label className="flex flex-col gap-1 sm:col-span-2">
+            備註
+            <input
+              value={infoForm.note}
+              onChange={(e) => setInfoForm({ ...infoForm, note: e.target.value })}
+              className="border border-rule px-2 py-1"
+            />
+          </label>
+          <div className="sm:col-span-2 flex gap-2 items-center">
+            <button
+              onClick={handleSaveInfo}
+              disabled={savingInfo}
+              className="border border-ink bg-ink text-paper px-3 py-1 text-xs disabled:opacity-50"
+            >
+              {savingInfo ? '儲存中…' : '儲存'}
+            </button>
+            <button onClick={() => setEditingInfo(false)} className="border border-rule px-3 py-1 text-xs bg-white/70">
+              取消
+            </button>
+          </div>
+        </div>
+      )}
 
       <h2 className="font-display text-lg font-semibold mb-2">交班摘要</h2>
       <div className="mb-6">
