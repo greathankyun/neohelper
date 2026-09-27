@@ -28,6 +28,12 @@ ALTER TABLE patients ADD COLUMN IF NOT EXISTS rop_risk_o2_unmonitored BOOLEAN NO
 -- details this app does not track)
 ALTER TABLE patients ADD COLUMN IF NOT EXISTS synagis_cld BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE patients ADD COLUMN IF NOT EXISTS synagis_cardiac BOOLEAN NOT NULL DEFAULT false;
+-- 交班總表 (handoff summary): free-text fields the doctor maintains directly, not
+-- tied to a specific day's rounds record.
+ALTER TABLE patients ADD COLUMN IF NOT EXISTS diagnosis TEXT;
+ALTER TABLE patients ADD COLUMN IF NOT EXISTS data_summary TEXT;
+ALTER TABLE patients ADD COLUMN IF NOT EXISTS management_summary TEXT;
+ALTER TABLE patients ADD COLUMN IF NOT EXISTS course_plan_summary TEXT;
 
 CREATE TABLE IF NOT EXISTS daily_logs (
   id             TEXT PRIMARY KEY,

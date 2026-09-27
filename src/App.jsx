@@ -5,6 +5,7 @@ import ModulePage from './components/ModulePage'
 import RequireAuth from './components/RequireAuth'
 import PatientsList from './components/PatientsList'
 import PatientDetail from './components/PatientDetail'
+import HandoffOverview from './components/HandoffOverview'
 import { AuthProvider } from './components/AuthContext'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/module/:id" element={<ModulePage />} />
           <Route element={<RequireAuth />}>
             <Route path="/patients" element={<PatientsList />} />
+            <Route path="/patients/handoff" element={<HandoffOverview />} />
             <Route path="/patients/:id" element={<PatientDetail />} />
           </Route>
         </Route>

@@ -30,6 +30,10 @@ function patientRowToJson(row) {
     ropRiskO2Unmonitored: row.rop_risk_o2_unmonitored,
     synagisCld: row.synagis_cld,
     synagisCardiac: row.synagis_cardiac,
+    diagnosis: row.diagnosis,
+    dataSummary: row.data_summary,
+    managementSummary: row.management_summary,
+    coursePlanSummary: row.course_plan_summary,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -149,6 +153,10 @@ const CREATE_FIELD_MAP = {
   rop_risk_o2_unmonitored: 'ropRiskO2Unmonitored',
   synagis_cld: 'synagisCld',
   synagis_cardiac: 'synagisCardiac',
+  diagnosis: 'diagnosis',
+  data_summary: 'dataSummary',
+  management_summary: 'managementSummary',
+  course_plan_summary: 'coursePlanSummary',
 };
 const NUMERIC_COLS = ['ga_weeks', 'ga_days', 'birth_weight_grams', 'apgar_1min', 'apgar_5min'];
 const DATE_COLS = ['birth_date', 'edc'];

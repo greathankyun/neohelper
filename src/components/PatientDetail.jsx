@@ -9,6 +9,7 @@ import tpnData from '../data/tpn.json';
 import RemindersPanel from './RemindersPanel';
 import RoundsForm from './RoundsForm';
 import LinesSection from './LinesSection';
+import HandoffCard from './HandoffCard';
 
 const bilCalc = jaundiceData.sections.find((s) => s.id === 'bilirubin-standards').calculator;
 const tpnCalc = tpnData.sections.find((s) => s.calculator)?.calculator;
@@ -148,6 +149,11 @@ export default function PatientDetail() {
         <div className="readout">目前體重（最新記錄）：{latestWeight} g</div>
         <div>狀態：{patient.status === 'active' ? '在院' : '已出院'}</div>
         {patient.note && <div className="sm:col-span-2 text-ink/70">備註：{patient.note}</div>}
+      </div>
+
+      <h2 className="font-display text-lg font-semibold mb-2">交班摘要</h2>
+      <div className="mb-6">
+        <HandoffCard patient={patient} rounds={patient.rounds} onChanged={load} linkToDetail={false} />
       </div>
 
       <h2 className="font-display text-lg font-semibold mb-2">提醒事項</h2>

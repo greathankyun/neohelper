@@ -87,9 +87,14 @@ export default function PatientsList() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h1 className="font-display text-2xl font-bold">病人追蹤</h1>
-        <button onClick={logout} className="text-xs text-ink/50 underline">
-          登出
-        </button>
+        <div className="flex items-center gap-3">
+          <Link to="/patients/handoff" className="text-xs text-alert underline">
+            交班總表
+          </Link>
+          <button onClick={logout} className="text-xs text-ink/50 underline">
+            登出
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 mb-4">
