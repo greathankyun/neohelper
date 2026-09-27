@@ -5,7 +5,8 @@ import { computeAge, formatGa, formatDate, birthHistoryDefault } from '../utils/
 import { groupConsecutiveByDate } from '../utils/timeline';
 import { feedingDisplay } from '../utils/reminders';
 
-const FREE_TEXT_FIELDS = [
+const COLUMNS = [
+  { key: 'diagnosis', label: 'Diagnosis' },
   { key: 'dataSummary', label: 'Data' },
   { key: 'managementSummary', label: 'Management' },
   { key: 'coursePlanSummary', label: 'Course + Plan' },
@@ -23,6 +24,10 @@ function MultiLine({ text, placeholder }) {
       ))}
     </div>
   );
+}
+
+function ColumnHeader({ children }) {
+  return <div className="text-xs font-mono uppercase tracking-wide text-ink/50 mb-1">{children}</div>;
 }
 
 function StatusSnapshot({ patient, rounds, showIdentifier }) {
@@ -77,24 +82,19 @@ function StatusSnapshot({ patient, rounds, showIdentifier }) {
 export default function HandoffCard({ patient, rounds, onChanged, linkToDetail = true }) {
   const [editing, setEditing] = useState(false);
   const defaultBirthHistory = birthHistoryDefault(patient);
-  const [form, setForm] = useState({
+  const blankForm = () => ({
     birthHistoryNote: patient.birthHistoryNote || defaultBirthHistory,
     diagnosis: patient.diagnosis || '',
     dataSummary: patient.dataSummary || '',
     managementSummary: patient.managementSummary || '',
     coursePlanSummary: patient.coursePlanSummary || '',
   });
+  const [form, setForm] = useState(blankForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   function openEdit() {
-    setForm({
-      birthHistoryNote: patient.birthHistoryNote || defaultBirthHistory,
-      diagnosis: patient.diagnosis || '',
-      dataSummary: patient.dataSummary || '',
-      managementSummary: patient.managementSummary || '',
-      coursePlanSummary: patient.coursePlanSummary || '',
-    });
+    setForm(blankForm());
     setEditing(true);
   }
 
@@ -116,7 +116,8 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
 
   return (
     <div className="border border-rule bg-white/50 p-3">
-      <div className="grid sm:grid-cols-[minmax(11rem,14rem)_1fr] gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-[minmax(10rem,13rem)_repeat(4,minmax(9rem,1fr))] gap-3">
+        {/* Status column */}
         <div className="sm:border-r sm:border-rule sm:pr-3">
           <StatusSnapshot patient={patient} rounds={rounds} showIdentifier={linkToDetail} />
           {linkToDetail && (
@@ -126,74 +127,81 @@ export default function HandoffCard({ patient, rounds, onChanged, linkToDetail =
           )}
         </div>
 
-        <div>
-          {!editing ? (
-            <div className="space-y-2.5">
-              <div>
-                <div className="text-xs font-mono uppercase tracking-wide text-ink/50">Diagnosis</div>
-                <div className="text-sm mb-1">
-                  <span className="text-ink/50">Birth history：</span>
-                  {displayedBirthHistory}
-                </div>
-                <MultiLine text={patient.diagnosis} placeholder="（尚未填寫）" />
+        {!editing ? (
+          <>
+            <div className="sm:border-r sm:border-rule sm:pr-3">
+              <ColumnHeader>Diagnosis</ColumnHeader>
+              <div className="text-sm mb-1">
+                <span className="text-ink/50">Birth history：</span>
+                {displayedBirthHistory}
               </div>
-              {FREE_TEXT_FIELDS.map(({ key, label }) => (
-                <div key={key}>
-                  <div className="text-xs font-mono uppercase tracking-wide text-ink/50">{label}</div>
-                  <MultiLine text={patient[key]} placeholder="（尚未填寫）" />
-                </div>
-              ))}
-              <button onClick={openEdit} className="text-xs border border-rule px-2 py-1 bg-white/70">
-                編輯交班摘要
-              </button>
+              <MultiLine text={patient.diagnosis} placeholder="（尚未填寫）" />
             </div>
-          ) : (
-            <div className="space-y-2">
-              <div>
-                <div className="text-xs font-mono uppercase tracking-wide text-ink/50 mb-1">Diagnosis</div>
-                <label className="text-xs flex flex-col gap-1 mb-1.5">
-                  Birth history（已依出生資料自動帶入，可直接修改）
-                  <input
-                    value={form.birthHistoryNote}
-                    onChange={(e) => setForm({ ...form, birthHistoryNote: e.target.value })}
-                    className="border border-rule px-2 py-1 text-sm"
-                  />
-                </label>
-                <label className="text-xs flex flex-col gap-1">
-                  Diagnosis（每行一項，Enter 換行）
-                  <textarea
-                    value={form.diagnosis}
-                    onChange={(e) => setForm({ ...form, diagnosis: e.target.value })}
-                    className="border border-rule px-2 py-1 text-sm min-h-[3.5rem]"
-                  />
-                </label>
+            {COLUMNS.slice(1).map(({ key, label }, i) => (
+              <div key={key} className={i < COLUMNS.length - 2 ? 'sm:border-r sm:border-rule sm:pr-3' : ''}>
+                <ColumnHeader>{label}</ColumnHeader>
+                <MultiLine text={patient[key]} placeholder="（尚未填寫）" />
               </div>
-              {FREE_TEXT_FIELDS.map(({ key, label }) => (
-                <label key={key} className="text-xs flex flex-col gap-1">
-                  {label}（每行一項，Enter 換行）
+            ))}
+          </>
+        ) : (
+          <div className="sm:col-span-4 grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <ColumnHeader>Diagnosis</ColumnHeader>
+              <label className="text-xs flex flex-col gap-1 mb-1.5">
+                Birth history（已依出生資料自動帶入，可直接修改）
+                <input
+                  value={form.birthHistoryNote}
+                  onChange={(e) => setForm({ ...form, birthHistoryNote: e.target.value })}
+                  className="border border-rule px-2 py-1 text-sm"
+                />
+              </label>
+              <label className="text-xs flex flex-col gap-1">
+                每行一項，Enter 換行
+                <textarea
+                  value={form.diagnosis}
+                  onChange={(e) => setForm({ ...form, diagnosis: e.target.value })}
+                  className="border border-rule px-2 py-1 text-sm min-h-[5rem]"
+                />
+              </label>
+            </div>
+            {COLUMNS.slice(1).map(({ key, label }) => (
+              <div key={key}>
+                <ColumnHeader>{label}</ColumnHeader>
+                <label className="text-xs flex flex-col gap-1">
+                  每行一項，Enter 換行
                   <textarea
                     value={form[key]}
                     onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                    className="border border-rule px-2 py-1 text-sm min-h-[3.5rem]"
+                    className="border border-rule px-2 py-1 text-sm min-h-[5rem]"
                   />
                 </label>
-              ))}
-              {error && <div className="text-xs text-alert">{error}</div>}
-              <div className="flex gap-2">
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="text-xs border border-ink bg-ink text-paper px-3 py-1 disabled:opacity-50"
-                >
-                  {saving ? '儲存中…' : '儲存'}
-                </button>
-                <button onClick={() => setEditing(false)} className="text-xs border border-rule px-3 py-1 bg-white/70">
-                  取消
-                </button>
               </div>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3">
+        {!editing ? (
+          <button onClick={openEdit} className="text-xs border border-rule px-2 py-1 bg-white/70">
+            編輯交班摘要
+          </button>
+        ) : (
+          <div className="flex gap-2 items-center">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="text-xs border border-ink bg-ink text-paper px-3 py-1 disabled:opacity-50"
+            >
+              {saving ? '儲存中…' : '儲存'}
+            </button>
+            <button onClick={() => setEditing(false)} className="text-xs border border-rule px-3 py-1 bg-white/70">
+              取消
+            </button>
+            {error && <span className="text-xs text-alert">{error}</span>}
+          </div>
+        )}
       </div>
     </div>
   );
